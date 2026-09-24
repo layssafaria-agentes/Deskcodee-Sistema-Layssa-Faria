@@ -1,0 +1,15 @@
+# Segredos - nunca commitar
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+infra/secrets/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Dependências (se algum dia clonarmos o DeskcommCRM dentro deste repo)
+node_modules/
+.next/
