@@ -5,6 +5,38 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-25 — Domínio, SSH, .env e segurança do WAHA
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:**
+1. Usuário perguntou se dava pra usar o domínio grátis da Vercel. Resposta: não funciona (arquitetura
+   roda em Docker/VPS com sessão persistente do WAHA, incompatível com hospedagem serverless). Depois de
+   discutir alternativas (subdomínio da agência, DuckDNS, comprar domínio barato), o usuário perguntou
+   sobre Cloudflare — confirmado que o **Cloudflare Tunnel** resolve o problema de graça, sem precisar
+   de domínio nenhum agora. Decisão registrada em **D005** (`01-decisoes.md`): usar Cloudflare Tunnel,
+   sem comprar domínio por enquanto.
+2. Documentado passo a passo de como conseguir acesso SSH na VPS Hostgator (painel do cliente, checar
+   se é VPS de verdade e não hospedagem compartilhada, IP + senha root, primeiros passos de segurança)
+   em [`../docs/infraestrutura.md`](../docs/infraestrutura.md).
+3. Criado `infra/.env` (real, protegido pelo `.gitignore`, confirmado via `git check-ignore`) e
+   `infra/.env.example` (template seguro para versionar) — usuário vai preencher as chaves (OpenAI,
+   Supabase) direto no arquivo, sem colar no chat.
+4. Usuário confirmou que vai buscar as informações da clínica (serviços, preços, etc.) diretamente com
+   a Dra. Layssa, sem previsão de data.
+5. Pesquisado a segurança e o custo real do WAHA (pergunta direta do usuário): software confiável, risco
+   é o uso não-oficial do protocolo do WhatsApp (mesmo trade-off da decisão D002), e o custo real é
+   ~US$5/mês (tier "Community", não mais "Plus" a ~US$19/mês como a documentação antiga sugeria).
+   Detalhes em `02-pesquisa-deskcommcrm.md`.
+
+**Arquivos criados/alterados:** `infra/.env`, `infra/.env.example`, `docs/infraestrutura.md`,
+`memoria/01-decisoes.md` (D005), `memoria/02-pesquisa-deskcommcrm.md`, `memoria/03-pendencias.md`.
+
+**Pendente para a próxima sessão:** acesso SSH à VPS, chave OpenAI, conta Supabase, decidir número de
+WhatsApp dedicado, instalar `cloudflared` assim que houver acesso à VPS.
+
+---
+
 ## 2026-09-24 — Kickoff do projeto
 
 **Participantes:** Samue (marketing/gestão) + Claude Code

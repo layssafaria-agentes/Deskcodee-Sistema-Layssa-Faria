@@ -67,3 +67,26 @@ intercambiáveis via Vercel AI SDK, então essa escolha pode ser revisitada faci
 de ambiente, sem re-arquitetar nada).
 
 **Por quê:** pedido explícito do usuário.
+
+---
+
+## D005 — Domínio: usar Cloudflare Tunnel, sem comprar domínio agora
+
+**Data:** 2026-09-25 · **Status:** Aprovado
+
+Não registrar/comprar domínio nesta fase. Em vez disso, expor a VPS via **Cloudflare Tunnel**
+(`cloudflared`), que fornece uma URL pública com HTTPS válido de graça (modo rápido:
+`*.trycloudflare.com`; modo estável: túnel nomeado, sem precisar de domínio próprio).
+
+**Por quê:** o usuário perguntou se dava pra usar o domínio grátis da Vercel — não funciona, porque a
+arquitetura roda em Docker numa VPS (sessão persistente do WAHA), incompatível com hospedagem
+serverless (Vercel ou Cloudflare Pages/Workers têm a mesma limitação). O Cloudflare Tunnel resolve o
+problema real por trás da pergunta (ter uma URL pública com HTTPS sem custo) sem essa incompatibilidade.
+
+**Trade-off aceito:** a URL do modo rápido muda a cada reinício do túnel — ok para testes internos, mas
+antes de divulgar para pacientes de verdade, migrar para um túnel nomeado (ainda sem custo). Integrações
+que exigem callback estável (ex.: OAuth do Google Calendar) só devem ser configuradas depois dessa
+migração.
+
+**Quando revisitar:** quando a Dra. Layssa comprar o domínio oficial da clínica — nesse momento só se
+adiciona o domínio no Cloudflare e aponta pro túnel nomeado, sem precisar reinstalar o DeskcommCRM.

@@ -111,6 +111,27 @@ código/configuração):
 Também existem specs de handoff na raiz do repo sobre: conversa virando lead, automação de follow-up
 (sistema Vivo), fila de atendimento ("W1 filing"), protocolo de notificação de leads.
 
+## WAHA (o motor de WhatsApp usado) — pesquisa de segurança e custo, 2026-09-25
+
+O usuário perguntou diretamente se o WAHA é seguro. Pesquisado o projeto em si (não só o que o
+DeskcommCRM menciona): é o [`devlikeapro/waha`](https://github.com/devlikeapro/waha) no GitHub,
+site oficial https://waha.devlike.pro — projeto real, popular, com documentação própria.
+
+- **Software:** confiável, sem indício de malware ou má reputação. Múltiplos "engines" (WEBJS, NOWEB,
+  GOWS, WPP) para automatizar o WhatsApp Web.
+- **O risco real não é o software, é o protocolo:** WAHA automatiza o WhatsApp de forma **não-oficial**
+  (não é a API oficial da Meta) — tecnicamente contraria os Termos de Serviço do WhatsApp. Isso cria
+  risco de bloqueio do número, principalmente se: enviar mensagens muito rápido, disparar em massa para
+  contatos que nunca falaram com a clínica, usar número muito novo já em alto volume. Risco é baixo se
+  usado de forma reativa (responder quem chamou) e com bom senso — mas não é zero, e não tem um "SLA"
+  de apelação como a API oficial da Meta teria. É o mesmo trade-off já registrado na decisão D002.
+- **Custo:** até a v2026.6.1 existia separação Core (grátis, 1 sessão, só texto) / Plus (~US$19/mês,
+  mídia + sessões ilimitadas) / PRO (~US$99/mês, código-fonte). **A partir da v2026.6.1, isso mudou:**
+  não existe mais "Plus" separado — as funcionalidades foram incorporadas ao Core, e passou a existir um
+  tier pago único **"Community" por ~US$5/mês** que libera tudo (sessões ilimitadas, mídia, storage,
+  segurança). Ou seja: o custo mensal do WAHA para a clínica deve ficar em torno de **US$5/mês**, não
+  US$19 como a documentação antiga do DeskcommCRM sugeria ao citar "WAHA Plus".
+
 ## Perguntas em aberto sobre o DeskcommCRM (investigar na próxima sessão técnica)
 
 - Ler o `install.sh` linha a linha antes do primeiro deploy real.

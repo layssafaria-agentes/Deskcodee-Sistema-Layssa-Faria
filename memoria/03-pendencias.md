@@ -5,18 +5,21 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 
 ## Bloqueadores para o deploy (precisam de resposta/ação do usuário)
 
-- [ ] **Domínio:** já existe um domínio para a clínica (ex.: `clinicalayssafaria.com.br`)? Se sim, qual
-      registrador? Se não, vamos precisar registrar um.
-- [ ] **Acesso à VPS Hostgator:** IP, usuário SSH e senha/chave já em mãos? Painel é cPanel, VPS pura
-      (root) ou algo tipo CyberPanel?
-- [ ] **Chave da API OpenAI:** já existe uma conta/organização OpenAI com billing ativo? Se não, criar em
-      https://platform.openai.com e gerar uma API key (colocar em `infra/.env` local, **nunca commitar**
-      no Git — ver `.gitignore`).
-- [ ] **Conta Supabase:** criar uma conta gratuita em https://supabase.com (usada para banco de dados,
-      auth e storage — o DeskcommCRM automatiza a criação do projeto Supabase durante a instalação se
-      dermos um `SUPABASE_ACCESS_TOKEN`, mas a conta em si precisa existir).
+- [x] **Domínio:** resolvido em 2026-09-25 — não vamos comprar domínio agora, vamos usar Cloudflare
+      Tunnel (ver decisão D005 em `01-decisoes.md`). Comprar domínio fica para quando a Dra. Layssa
+      decidir.
+- [ ] **Acesso à VPS Hostgator:** usuário perguntou "como pego o SSH" em 2026-09-25 — passo a passo
+      completo já documentado em [`../docs/infraestrutura.md`](../docs/infraestrutura.md#como-pegar-o-acesso-ssh-na-hostgator).
+      **Ação:** usuário precisa entrar no painel da Hostgator, confirmar que o plano é VPS de verdade
+      (não hospedagem compartilhada) e conseguir IP + senha de root.
+- [ ] **Chave da API OpenAI:** ainda não confirmada. Arquivo `infra/.env` já criado (gitignored) —
+      usuário vai preencher direto lá, sem colar a chave no chat.
+- [ ] **Conta Supabase:** usuário confirmou em 2026-09-25 que vai colocar os dados no `.env` também —
+      ainda falta criar a conta em https://supabase.com e gerar as chaves.
 - [ ] **Número de WhatsApp dedicado:** a clínica vai usar um número novo só para a IA, ou o número que já
       usa hoje? (Recomendado: número novo, para não misturar histórico/contatos pessoais com o agente.)
+      Ainda não perguntado/respondido.
+- [ ] **Cloudflare Tunnel:** instalar o `cloudflared` na VPS assim que o SSH estiver disponível.
 
 ## Informações da clínica (para a base de conhecimento dos agentes)
 
@@ -24,12 +27,19 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       serviços/procedimentos oferecidos, faixa de preço ou política de "sob consulta", horário de
       funcionamento, endereço, convênios/planos aceitos, formas de pagamento, diferenciais da Dra.
       Layssa (formação, especializações, tempo de experiência), fotos/depoimentos que possam virar prova
-      social no atendimento.
+      social no atendimento. **Status (2026-09-25): usuário vai buscar essas informações direto com a
+      Dra. Layssa** — sem previsão de data ainda.
 
 ## Decisões técnicas ainda abertas
 
-- [ ] Confirmar se "WAHA Plus" (mencionado no README do DeskcommCRM) tem custo adicional além da VPS —
-      impacta o orçamento mensal.
+- [x] **WAHA — segurança e custo confirmados em 2026-09-25:** o software em si é confiável (projeto
+      open source popular, `devlikeapro/waha`, sem malware/red flags). O risco real não é o software,
+      é o **ToS do WhatsApp**: WAHA automatiza o WhatsApp Web de um jeito não-oficial, então existe
+      risco (baixo se usado com bom senso) de bloqueio do número — mitigar não fazendo disparo em massa
+      para quem nunca falou com a clínica, aquecendo o número aos poucos, respeitando opt-out. Sobre
+      custo: desde a v2026.6.1 não existe mais separação Core/Plus — o que era "Plus" (mídia, múltiplas
+      sessões) está incluído a partir do tier pago **"Community" (~US$5/mês)**. Atualizado em
+      `docs/infraestrutura.md` (orçamento) e `memoria/02-pesquisa-deskcommcrm.md`.
 - [ ] Definir se vamos integrar com o Ileva (sistema de gestão) nesta fase ou deixar para uma fase 2 —
       hoje não está claro se o Ileva tem API pública para esse tipo de integração.
 - [ ] Ler o script `hostgator-setup-kit/install.sh` linha a linha antes do primeiro deploy (checklist de
