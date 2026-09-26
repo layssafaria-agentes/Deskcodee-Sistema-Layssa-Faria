@@ -8,6 +8,26 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 2) — Repositório GitHub criado e projeto enviado
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário criou o repositório público `layssafaria-agentes/Deskcodee-Sistema-Layssa-Faria`
+no GitHub e pediu para subir todos os arquivos. Gerado um token fine-grained (escopo só desse repo,
+Contents: Read and write) guardado temporariamente em `.env` na raiz do projeto (arquivo já coberto pelo
+`.gitignore`, separado do `infra/.env` que guarda as chaves da aplicação). Usado para autenticar o
+`git push` e removido do `git remote` logo em seguida (URL do remoto ficou limpa, sem token). Branch
+local renomeada de `master` para `main` para bater com o padrão do GitHub. Confirmado após o push que
+apenas `infra/.env.example` (o template) está versionado — nenhum segredo real subiu.
+
+**Nota:** o usuário pode apagar o `.env` da raiz (ou só o valor do `GITHUB_TOKEN`) e revogar o token no
+GitHub, já que não é mais necessário depois do push inicial — só voltaria a ser preciso gerar outro para
+um próximo push feito por mim.
+
+**Arquivos alterados:** `memoria/00-diario-do-projeto.md`, `memoria/03-pendencias.md`.
+
+---
+
 ## 2026-09-26 (cont.) — Projeto reaberto no disco D, pasta antiga apagada
 
 **Participantes:** Samue + Claude Code

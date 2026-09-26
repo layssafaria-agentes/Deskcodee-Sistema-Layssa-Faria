@@ -62,5 +62,8 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 - [ ] Conectar WAHA com o número de WhatsApp escolhido (QR Code).
 - [ ] Configurar Google Calendar para agendamento automático.
 - [ ] Testar o fluxo ponta a ponta com números de teste antes de liberar para clientes reais.
-- [ ] Criar repositório no GitHub e subir o projeto (usuário pediu para isso ser feito "quando tiver
-      algo" — ainda não fizemos `git init`/push, está tudo local por enquanto).
+- [x] **Repositório no GitHub criado e projeto enviado em 2026-09-26:**
+      https://github.com/layssafaria-agentes/Deskcodee-Sistema-Layssa-Faria (branch `main`). Push feito
+      via token fine-grained temporário (escopo Contents: read/write só desse repo), removido do
+      `git remote` logo depois de usado. Confirmado que só `infra/.env.example` foi versionado — os
+      `.env` reais (app e o token do GitHub) continuam fora do Git.
