@@ -9,11 +9,14 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       Tunnel (ver decisão D005 em `01-decisoes.md`). Comprar domínio fica para quando a Dra. Layssa
       decidir.
 - [x] **VPS confirmada em 2026-09-26:** é uma VPS de verdade, Ubuntu 22.04.
-- [ ] **Acesso SSH ainda não estabelecido pelo usuário.** Guia completo (incluindo como guardar
-      IP/porta/usuário com segurança via chave SSH + `~/.ssh/config`, sem depender de arquivo nenhum
-      dentro do projeto) em
-      [`../docs/infraestrutura.md`](../docs/infraestrutura.md#onde-guardar-ip-porta-e-usuário-da-vps-com-segurança).
-      **Próxima ação do usuário:** gerar a chave SSH e copiá-la pra VPS seguindo o guia.
+- [x] **Acesso SSH estabelecido em 2026-09-26.** Porta SSH da Hostgator é **22022** (não a 22 padrão —
+      causou um "connection timed out" até descobrirmos isso no painel). Usuário `deskcomm` criado com
+      sudo, chave ed25519 **sem passphrase** (`~/.ssh/layssafaria_vps` no PC do Samue) configurada em
+      `authorized_keys`, alias `layssafaria-vps` em `~/.ssh/config`. Escolha explícita do usuário: chave
+      sem passphrase pra permitir que o Claude Code rode comandos direto na VPS sem interação (opção B
+      discutida — troca segurança por praticidade, é uma decisão consciente, ver diário). Firewall `ufw`
+      ativo liberando 22022/80/443. **Sudo sem senha liberado pro `deskcomm` (decisão D008)** — reavaliar/
+      apertar antes de produção com dado real de paciente.
 - [x] **Chave da API OpenAI:** preenchida pelo usuário em `infra/.env` em 2026-09-26.
 - [x] **Supabase:** URL, anon key e service role key preenchidas pelo usuário em `infra/.env` em
       2026-09-26. Falta só o `SUPABASE_DB_URL` (connection string do Postgres).
@@ -21,12 +24,18 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       usa hoje? (Recomendado: número novo, para não misturar histórico/contatos pessoais com o agente.)
       Ainda não perguntado/respondido.
 - [ ] **Cloudflare Tunnel:** instalar o `cloudflared` na VPS assim que o SSH estiver disponível.
-- [ ] **Domínio `layssafaria.com` comprado (2026-09-26, Hostgator, 1 ano) — ver decisão D007.** Falta:
-      1. criar conta free no Cloudflare e adicionar o domínio;
-      2. trocar os nameservers no painel da Hostgator para os do Cloudflare;
-      3. criar túnel nomeado (`cloudflared tunnel create clinica-layssa`) e CNAME apontando pra ele;
-      4. usar o subdomínio (ex. `app.layssafaria.com` — decidido em 2026-09-26, raiz do domínio fica
-         reservada pro futuro site institucional) como `NEXT_PUBLIC_APP_URL`.
+- [ ] **Domínio `layssafaria.com` comprado (2026-09-26, Hostgator, 1 ano) — ver decisão D007.** Progresso:
+      1. [x] conta free criada no Cloudflare, domínio adicionado, registros DNS revisados (mantido MX;
+         desativado proxy em `mail` e `ftp` por serem protocolos não-HTTP; `www`/`A` da raiz mantidos com
+         proxy);
+      2. [x] nameservers trocados no painel da Hostgator para os do Cloudflare, **domínio ativo/protegido
+         pela Cloudflare confirmado em 2026-09-26** (propagou em poucas horas, não precisou das 24h);
+         SSL/TLS configurado: modo "Completo", TLS mínima 1.2, "Sempre usar HTTPS" ativado;
+      3. [ ] criar túnel (Zero Trust → Networks → Tunnels no painel do Cloudflare) e configurar Public
+         Hostname `app.layssafaria.com` → depende do acesso SSH à VPS (item acima) pra rodar o comando de
+         instalação do `cloudflared`;
+      4. [ ] usar `app.layssafaria.com` (decidido em 2026-09-26, raiz do domínio fica reservada pro futuro
+         site institucional) como `NEXT_PUBLIC_APP_URL`.
 - [x] **Domínio — "qualquer um serve?" respondido em 2026-09-26:** sim, qualquer domínio de qualquer
       registrador funciona (incluindo `.com.br`), desde que se controle o DNS dele. Não é bloqueador.
 

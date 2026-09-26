@@ -8,6 +8,72 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 6) — Acesso SSH à VPS estabelecido, sudo liberado pro Claude Code
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** primeiro acesso à VPS via SSH. Achado no caminho: `ssh root@IP` na porta 22 dava
+"connection timed out" — a Hostgator usa **porta 22022**, não a 22 padrão (só aparece no painel de
+detalhes da VPS). Depois de conectar, usuário rodou o roteiro de bootstrap (senha nova de root, criação
+do usuário `deskcomm` com sudo, chave pública do Claude Code copiada pra `authorized_keys`, firewall
+`ufw` liberando 22022/80/443). Configurado o alias `layssafaria-vps` em `~/.ssh/config` no PC do Samue e
+confirmado que o Claude Code já consegue rodar comandos direto na VPS via SSH (chave ed25519 sem
+passphrase, decisão consciente do usuário — trade-off de segurança documentado).
+
+Discutido e aprovado liberar **`sudo` sem senha** (`NOPASSWD:ALL`) pro `deskcomm`, pra evitar interromper
+o usuário a cada comando administrativo — registrado como decisão **D008** em `01-decisoes.md`, com nota
+explícita pra reavaliar/apertar antes de ter dado real de paciente na VPS.
+
+**Pendente para a próxima sessão:** criar o túnel no painel do Cloudflare (Zero Trust → Networks →
+Tunnels) — isso é ação de conta, só o usuário consegue fazer — e depois rodar o comando de instalação
+do `cloudflared` que o painel gerar, agora direto por SSH.
+
+**Arquivos alterados:** `memoria/01-decisoes.md` (D008), `memoria/03-pendencias.md`,
+`memoria/00-diario-do-projeto.md`.
+
+---
+
+## 2026-09-26 (cont. 5) — Domínio ativo no Cloudflare, SSL/TLS configurado
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** confirmação de ativação do domínio no Cloudflare chegou bem mais rápido que as 24h
+previstas ("Seu domínio agora está protegido pela Cloudflare"). Configurado SSL/TLS: modo de criptografia
+**"Completo"** (Cloudflare↔origem também criptografado), **"Sempre usar HTTPS"** ativado, e **versão
+mínima de TLS elevada de 1.0 para 1.2** (protocolos antigos/inseguros desativados). Certificado Universal
+já ativo cobrindo `layssafaria.com` e `*.layssafaria.com` (o curinga já cobre `app.layssafaria.com`
+quando o túnel for criado, sem precisar emitir nada novo).
+
+**Pendente para a próxima sessão:** criar o túnel nomeado no Cloudflare (Zero Trust → Networks → Tunnels)
+e configurar o Public Hostname `app.layssafaria.com` — falta decidir como rodar o comando de instalação
+do `cloudflared` na VPS, já que o acesso SSH ainda não foi estabelecido (perguntado ao usuário se prefere
+rodar ele mesmo e colar a saída, ou configurar uma chave sem passphrase pra eu rodar direto).
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
+## 2026-09-26 (cont. 4) — Domínio adicionado ao Cloudflare, nameservers trocados
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário criou conta free no Cloudflare, adicionou `layssafaria.com` e revisou os
+registros DNS detectados automaticamente (1 A, 3 CNAME — `www`, `ftp`, `mail` —, 1 MX). Orientado a manter
+o MX (e-mail já configurado no domínio) e a desligar o proxy (nuvem laranja) dos registros `mail` e `ftp`,
+já que o proxy da Cloudflare só funciona para HTTP/HTTPS e quebraria e-mail/FTP se ficasse ligado;
+`www`/`A` da raiz mantidos com proxy (tráfego web normal). Depois trocou os nameservers no painel da
+Hostgator (usando a opção "Outra plataforma de hospedagem") de `dns3/dns4.hostgator.com.br` para
+`jessica.ns.cloudflare.com`/`sid.ns.cloudflare.com` — confirmado com sucesso pela Hostgator, aguardando
+propagação/ativação no Cloudflare (até 24h).
+
+**Pendente para a próxima sessão:** confirmar ativação do domínio no Cloudflare (aviso por e-mail), depois
+criar o túnel nomeado e o Public Hostname `app.layssafaria.com` — isso ainda depende do acesso SSH à VPS,
+que segue pendente.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 3) — Domínio oficial comprado: layssafaria.com
 
 **Participantes:** Samue + Claude Code

@@ -139,3 +139,24 @@ reinstalar nada, só apontar o domínio para o Cloudflare Tunnel.
 5. Usar `https://layssafaria.com` (ou um subdomínio, ex. `app.layssafaria.com`) como `NEXT_PUBLIC_APP_URL`
    no `.env` e como URL de callback (ex.: OAuth do Google Calendar, que exige URL estável — isso só fazia
    sentido depois de ter domínio fixo, ver D005).
+
+---
+
+## D008 — Sudo sem senha (`NOPASSWD:ALL`) para `deskcomm` na VPS
+
+**Data:** 2026-09-26 · **Status:** Aprovado (temporário)
+
+Liberado `sudo` sem senha pra `deskcomm` (`/etc/sudoers.d/deskcomm-nopasswd`), pra permitir que o Claude
+Code rode comandos administrativos na VPS (instalar Docker, `cloudflared`, etc.) sem interromper o usuário
+pedindo senha a cada comando.
+
+**Por quê é aceitável agora:** o `deskcomm` já estava no grupo `sudo` (só faltava digitar senha — ou seja,
+já tinha o poder, só com uma trava a mais), a chave SSH que dá acesso como `deskcomm` já é sem passphrase
+(D007/decisão anterior — essa já era a trava real), e a VPS ainda está em fase de montagem, sem dado real
+de paciente.
+
+**Trade-off aceito:** remove a segunda trava entre "ter o arquivo da chave" e "ter root completo" — quem
+tiver o arquivo `layssafaria_vps` no PC do Samue já vira root direto, sem senha nenhuma.
+
+**Reavaliar antes de:** colocar dados reais de pacientes em produção — nesse momento, apertar de novo
+(remover o `NOPASSWD` ou restringir a comandos específicos).
