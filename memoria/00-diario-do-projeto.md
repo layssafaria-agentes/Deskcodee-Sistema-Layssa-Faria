@@ -8,6 +8,28 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 7) — Túnel Cloudflare instalado e funcionando
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário optou por criar o túnel pelo painel do **Zero Trust** (produto que exige
+cadastro de cartão mesmo no plano free, medida antifraude da Cloudflare — sem custo, avisado sobre a
+alternativa via CLI sem cartão, mas o usuário preferiu seguir pelo painel). Criado o túnel `clinica-layssa`
+(conector Cloudflared), gerado o token de instalação, e o Claude Code instalou o `cloudflared` na VPS via
+apt e ativou o serviço com o token — rodando via systemd, conectado ao edge de São Paulo (`gru13`).
+Configurado o Public Hostname `app.layssafaria.com` → `localhost:3000` (porta é uma suposição baseada no
+padrão do Next.js, DeskcommCRM ainda não foi instalado). Testado com `curl`: domínio responde **HTTP
+502**, que é o resultado esperado agora (confirma DNS + SSL + túnel funcionando ponta a ponta; só falta a
+aplicação real rodando na porta).
+
+**Pendente para a próxima sessão:** rodar o instalador guiado do DeskcommCRM na VPS (revisar o script
+antes, ver nota de segurança em `docs/infraestrutura.md`) e ajustar a porta do Public Hostname se
+necessário.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 6) — Acesso SSH à VPS estabelecido, sudo liberado pro Claude Code
 
 **Participantes:** Samue + Claude Code

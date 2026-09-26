@@ -31,11 +31,14 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       2. [x] nameservers trocados no painel da Hostgator para os do Cloudflare, **domínio ativo/protegido
          pela Cloudflare confirmado em 2026-09-26** (propagou em poucas horas, não precisou das 24h);
          SSL/TLS configurado: modo "Completo", TLS mínima 1.2, "Sempre usar HTTPS" ativado;
-      3. [ ] criar túnel (Zero Trust → Networks → Tunnels no painel do Cloudflare) e configurar Public
-         Hostname `app.layssafaria.com` → depende do acesso SSH à VPS (item acima) pra rodar o comando de
-         instalação do `cloudflared`;
-      4. [ ] usar `app.layssafaria.com` (decidido em 2026-09-26, raiz do domínio fica reservada pro futuro
-         site institucional) como `NEXT_PUBLIC_APP_URL`.
+      3. [x] **Túnel `clinica-layssa` criado via Zero Trust (cartão cadastrado pra ativar o produto, sem
+         custo no plano free) e instalado na VPS em 2026-09-26** — serviço `cloudflared` rodando via
+         systemd, conectado ao edge de São Paulo (`gru13`). Public Hostname configurado:
+         `app.layssafaria.com` → `localhost:3000` (porta é um chute baseado em Next.js padrão — ajustar
+         se o instalador do DeskcommCRM expuser outra). Confirmado com `curl`: domínio responde **HTTP
+         502** (esperado — túnel/DNS/SSL funcionando de ponta a ponta, só falta a aplicação rodando);
+      4. [x] `app.layssafaria.com` já é o `NEXT_PUBLIC_APP_URL` a usar quando instalarmos o DeskcommCRM
+         (raiz do domínio reservada pro futuro site institucional).
 - [x] **Domínio — "qualquer um serve?" respondido em 2026-09-26:** sim, qualquer domínio de qualquer
       registrador funciona (incluindo `.com.br`), desde que se controle o DNS dele. Não é bloqueador.
 
