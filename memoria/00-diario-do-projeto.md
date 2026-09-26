@@ -3,6 +3,39 @@
 Registro cronológico de tudo que foi feito, decidido e descoberto. Toda sessão de trabalho deve
 adicionar uma entrada nova no topo (mais recente primeiro).
 
+> **Nota de localização (2026-09-26):** o projeto vive agora em `D:\Projetos\layssafaria` (antes estava
+> em `OneDrive\Área de Trabalho\layssafaria`). Ver decisão D006.
+
+---
+
+## 2026-09-26 — VPS confirmada, .env preenchido, projeto saiu do OneDrive
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:**
+1. Usuário confirmou que a VPS é de verdade, **Ubuntu 22.04**, e preencheu `infra/.env` com dados reais
+   do Supabase (URL, anon key, service role key) e a chave da OpenAI.
+2. Usuário perguntou onde guardar com segurança IP/porta/usuário da VPS. Resposta: não no `.env` do
+   projeto (categoria de segredo muito mais sensível que chaves de API) — guia criado em
+   `docs/infraestrutura.md` usando chave SSH + arquivo `~/.ssh/config` (fora da pasta do projeto).
+3. Ao revisar o `.env` preenchido, identificado que **a pasta do projeto sincroniza com o OneDrive**, o
+   que expõe os segredos reais na nuvem da Microsoft independente do `.gitignore`. Perguntado ao usuário
+   como proceder — optou por mover o projeto pra fora do OneDrive.
+4. Usuário sugeriu mover para o disco D:. Confirmado que é uma boa solução (D: não é sincronizado pelo
+   OneDrive por padrão) e que existe espaço (668GB livres). Projeto copiado (robocopy, preservando
+   histórico do Git) para **`D:\Projetos\layssafaria`** — decisão **D006**.
+5. Tentativa de apagar a pasta antiga no OneDrive falhou (estava em uso pela sessão atual do
+   editor/terminal). **Ação pendente do usuário:** reabrir o projeto a partir de `D:\Projetos\layssafaria`
+   no editor, depois apagar a pasta antiga (ver `03-pendencias.md`).
+6. Respondida a pergunta "qualquer domínio serve?": sim, qualquer domínio de qualquer registrador
+   funciona com Cloudflare Tunnel/DNS + Let's Encrypt (incluindo `.com.br`), desde que se controle o DNS.
+
+**Arquivos alterados (já em `D:\Projetos\layssafaria`):** `docs/infraestrutura.md`,
+`memoria/01-decisoes.md` (D006), `memoria/03-pendencias.md`.
+
+**Pendente para a próxima sessão:** confirmar que o usuário reabriu o projeto no novo caminho, apagar a
+pasta antiga do OneDrive, gerar a chave SSH e testar a conexão com a VPS.
+
 ---
 
 ## 2026-09-25 — Domínio, SSH, .env e segurança do WAHA

@@ -48,17 +48,71 @@ nomear o túnel mesmo sem domínio, só a URL pública final fica mais estável)
    ```
    Digite "yes" se perguntar sobre confirmar a identidade do servidor (primeira conexão), depois cole a
    senha de root.
-5. **Assim que conectar pela primeira vez, faça isso antes de qualquer outra coisa** (segurança básica):
+5. **Assim que conectar pela primeira vez, faça isso antes de qualquer outra coisa** (VPS confirmada como
+   Ubuntu 22.04 em 2026-09-26 — os comandos abaixo são para essa distro):
    - Troque a senha de root: `passwd`
    - Crie um usuário próprio com sudo (evite trabalhar como root no dia a dia):
      `adduser deskcomm && usermod -aG sudo deskcomm`
-   - Configure autenticação por chave SSH e, depois de confirmar que funciona, desative login por senha.
+   - Siga a seção seguinte para configurar acesso por chave SSH.
    - Ative um firewall básico liberando só o necessário: `ufw allow 22 && ufw allow 80 && ufw allow 443 && ufw enable`
 
 Não me passe a senha de root nem a chave SSH pelo chat — isso deve ficar só entre você e a VPS. Se
 precisar que eu rode comandos na VPS futuramente, o caminho mais seguro é você mesmo abrir uma sessão
 SSH e ir me colando as saídas dos comandos que eu pedir, ou usar uma ferramenta de acesso remoto que
 você controle.
+
+## Onde guardar IP, porta e usuário da VPS com segurança
+
+**Não** colocar isso no `infra/.env` do projeto — esse arquivo é para segredos que a *aplicação* usa
+(chaves de API), e IP/porta/usuário/senha de acesso root são muito mais sensíveis (dão controle total do
+servidor), então merecem um lugar separado que nem sequer fica dentro da pasta do projeto.
+
+**A forma correta é nunca "escrever" a senha em lugar nenhum a longo prazo — usar chave SSH:**
+
+1. No seu PC (PowerShell), gerar um par de chaves só para esta VPS:
+   ```powershell
+   ssh-keygen -t ed25519 -C "layssafaria-vps" -f "$env:USERPROFILE\.ssh\layssafaria_vps"
+   ```
+   Vai pedir uma frase secreta (passphrase) — coloque uma, é uma camada extra de proteção da própria
+   chave. Isso cria dois arquivos em `C:\Users\Samue\.ssh\` (fora do OneDrive, fica só nesse PC):
+   `layssafaria_vps` (privada, nunca compartilhar) e `layssafaria_vps.pub` (pública).
+
+2. Copiar a chave pública para a VPS (única vez que ainda vai usar a senha):
+   ```powershell
+   type "$env:USERPROFILE\.ssh\layssafaria_vps.pub" | ssh deskcomm@SEU_IP -p SUA_PORTA "mkdir -p ~/.ssh && chmod 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys"
+   ```
+
+3. Criar (ou editar) o arquivo `C:\Users\Samue\.ssh\config` com um "apelido" para a VPS:
+   ```
+   Host layssafaria-vps
+       HostName SEU_IP
+       Port SUA_PORTA
+       User deskcomm
+       IdentityFile ~/.ssh/layssafaria_vps
+   ```
+   A partir daqui, conectar é só `ssh layssafaria-vps` — o IP/porta/usuário ficam guardados nesse
+   arquivo de configuração do SSH (que vive em `C:\Users\Samue\.ssh`, **fora** de qualquer pasta
+   sincronizada pelo OneDrive), não em nenhum arquivo do projeto.
+
+4. Testar `ssh layssafaria-vps` — deve conectar pedindo só a passphrase da chave (não mais a senha da
+   VPS). Depois de confirmar que funciona, **desative login por senha** no servidor: editar
+   `/etc/ssh/sshd_config`, colocar `PasswordAuthentication no` e `PermitRootLogin no`, depois
+   `sudo systemctl restart ssh`. A partir daí não existe mais senha nenhuma pra vazar — só a chave
+   privada no seu PC (protegida por passphrase).
+
+Se quiser um lembrete simples por escrito além disso (ex.: "a VPS da clínica é a que uso pra tal coisa"),
+use um gerenciador de senhas (Bitwarden, 1Password) em vez de um arquivo de texto — é o padrão correto
+pra esse tipo de credencial, e continua acessível de qualquer dispositivo sem depender de sync de pasta.
+
+## Domínio: qualquer um serve?
+
+Sim — **praticamente qualquer domínio, de qualquer registrador, funciona** com essa arquitetura
+(Cloudflare Tunnel/DNS + Let's Encrypt), incluindo `.com.br` (registro.br permite trocar os
+"nameservers" para os do Cloudflare sem problema — é uma prática comum). A única exigência real é que
+você (ou a clínica) **controle o DNS** desse domínio, ou seja, consiga apontar os nameservers para o
+Cloudflare ou pelo menos criar registros nele. Isso vale tanto para um domínio novo quanto para um
+subdomínio de um domínio que vocês já têm. Se em algum momento tiverem um domínio específico em mente,
+me diga qual que eu confirmo se há alguma particularidade antes de configurar.
 
 ## Passo a passo (alto nível)
 

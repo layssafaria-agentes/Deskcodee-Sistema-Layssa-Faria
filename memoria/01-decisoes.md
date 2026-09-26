@@ -90,3 +90,29 @@ migração.
 
 **Quando revisitar:** quando a Dra. Layssa comprar o domínio oficial da clínica — nesse momento só se
 adiciona o domínio no Cloudflare e aponta pro túnel nomeado, sem precisar reinstalar o DeskcommCRM.
+
+---
+
+## D006 — Projeto movido para fora do OneDrive (D:\Projetos\layssafaria)
+
+**Data:** 2026-09-26 · **Status:** Aprovado
+
+O projeto estava em `C:\Users\Samue\OneDrive\Área de Trabalho\layssafaria`, uma pasta sincronizada com a
+nuvem da Microsoft. Depois que o `infra/.env` passou a ter segredos reais (chave da OpenAI, chaves do
+Supabase incluindo a `service_role`, que dá acesso total ao banco ignorando RLS), isso significava que
+esses segredos estavam sendo enviados para o OneDrive automaticamente — o `.gitignore` só impede o Git
+de versionar, não impede a sincronização do OneDrive.
+
+Movido o projeto inteiro (histórico do Git incluído) para **`D:\Projetos\layssafaria`**, uma unidade que
+não é sincronizada pelo OneDrive por padrão.
+
+**Por quê essa opção e não excluir só a pasta `infra/` do sync do OneDrive:** mais simples e definitivo —
+não depende de configurar exclusões seletivas no cliente do OneDrive (que é fácil de esquecer/desfazer
+sem perceber), e mantém documentação + segredos juntos num único lugar coerente.
+
+**Pendência gerada:** a cópia antiga em `C:\Users\Samue\OneDrive\Área de Trabalho\layssafaria` não pôde
+ser apagada automaticamente (estava em uso pela sessão do editor) — ver
+[`03-pendencias.md`](03-pendencias.md#ação-imediata-pendente-finalizar-a-mudança-de-pasta) para o passo
+que falta.
+
+**A partir de agora, todo o trabalho neste projeto acontece em `D:\Projetos\layssafaria`.**
