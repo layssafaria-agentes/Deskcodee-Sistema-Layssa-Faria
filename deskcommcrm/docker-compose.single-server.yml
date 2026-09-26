@@ -1,11 +1,26 @@
 # Override do modo single-server: o CRM e o Supabase self-hosted compartilham
 # somente uma rede privada. Caddy publica HTTPS; Postgres e Studio ficam fora.
 
+# Certificado do Caddy (ver Caddyfile.single-server): como o app/worker chamam
+# o dominio publico por dentro da rede (alias abaixo, sem sair pra Cloudflare),
+# o cliente HTTPS deles PRECISA confiar nesse certificado autoassinado — o
+# "No TLS Verify" do tunel so vale pro salto Cloudflare->Caddy, nao pra esse.
+# NODE_EXTRA_CA_CERTS soma essa CA as CAs padrao do sistema, sem desligar
+# validacao de TLS pra mais nada (ex.: chamadas a OpenAI/Anthropic continuam
+# validando normalmente).
+x-caddy-cert-mount: &caddy-cert-mount
+  - caddy-data:/caddy-data:ro
+x-caddy-cert-env: &caddy-cert-env
+  NODE_EXTRA_CA_CERTS: /caddy-data/manual-tls/cert.pem
+
 services:
   app:
     networks:
       - internal
       - supabase_private
+    volumes: *caddy-cert-mount
+    environment:
+      <<: *caddy-cert-env
 
   # O worker e o voice-agent leem SUPABASE_DB_URL=...@supabase-db do .env, e
   # esse nome só existe na rede supabase_private: fora dela o boot não resolve
@@ -14,6 +29,9 @@ services:
     networks:
       - internal
       - supabase_private
+    volumes: *caddy-cert-mount
+    environment:
+      <<: *caddy-cert-env
 
   voice-agent:
     networks:
