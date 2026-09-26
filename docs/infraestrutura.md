@@ -136,32 +136,39 @@ me diga qual que eu confirmo se há alguma particularidade antes de configurar.
 
 ## Passo a passo (alto nível)
 
-1. Confirmar que é uma VPS de verdade e conseguir o acesso SSH (seção acima).
-2. Configurar o Cloudflare Tunnel para ter uma URL pública (seção acima).
-3. Rodar o instalador guiado:
+1. Confirmar que é uma VPS de verdade e conseguir o acesso SSH (seção acima). ✅
+2. Configurar o Cloudflare Tunnel para ter uma URL pública (seção acima). ✅
+3. Enviar o código já vendorizado em [`../deskcommcrm/`](../deskcommcrm/) pra VPS (`git clone` do nosso
+   próprio repositório, ou `rsync`/`scp` da pasta) e rodar o instalador **local**, já revisado:
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/hostgator-setup-kit/comecar.sh | bash
+   bash ubuntu-production-installer.sh --domain app.layssafaria.com
    ```
-   (revisar o script antes — ver nota de segurança abaixo)
-4. Fornecer ao instalador: URL do Cloudflare Tunnel (no lugar do domínio), `OPENAI_API_KEY`, credenciais
-   do Supabase, senha do admin.
-5. Acessar a aplicação pela URL do túnel.
+   Esse script (`deskcommcrm/ubuntu-production-installer.sh`) chama por baixo
+   `hostgator-setup-kit/install-single-server.sh` — como o código já está no nosso repositório (não é
+   mais `curl | bash` direto da internet, ver nota abaixo), dá pra ler os dois arquivos com calma antes
+   de rodar.
+4. O instalador é interativo: gera os segredos sozinho, sobe Supabase self-hosted, cria o admin inicial,
+   configura HTTPS e sobe os containers Docker (app, worker, scheduler, WAHA, Redis, Caddy). A IA
+   inicia **desativada** por padrão.
+5. Acessar a aplicação por `https://app.layssafaria.com`.
 6. Conectar o WhatsApp escaneando o QR Code gerado pelo WAHA dentro da interface do DeskcommCRM.
 7. Configurar o cron do `backup.sh` (Supabase free tier não faz backup automático).
-8. Configurar integração com Google Calendar (OAuth) para agendamento — atenção: o Google exige uma URL
-   de callback estável, então isso só faz sentido configurar depois de ter o túnel nomeado (ou o
-   domínio definitivo), não com a URL aleatória do modo rápido.
+8. Configurar integração com Google Calendar (OAuth) para agendamento — o Google exige uma URL de
+   callback estável, e já temos isso resolvido com o domínio fixo + túnel nomeado.
 
-## Nota de segurança sobre "curl | bash"
+## Nota de segurança: revisar antes de rodar
 
-Rodar `curl | bash` direto de um script de terceiros em uma VPS de produção é uma prática que merece
-cautela, mesmo quando o projeto é confiável (e este parece ser, ver
-[`../memoria/02-pesquisa-deskcommcrm.md`](../memoria/02-pesquisa-deskcommcrm.md)). Antes do deploy real:
+Como o código já está vendorizado em `deskcommcrm/` (não precisamos mais de `curl | bash` puxando um
+script direto da internet), o risco principal muda de "confiar num script de terceiro sem ver" pra
+"revisar o que já temos localmente antes de rodar em produção":
 
-1. Baixar o script localmente primeiro (`curl -o comecar.sh ...`), ler o conteúdo, só depois rodar.
-2. O mesmo vale para `install.sh`, que é quem de fato mexe no sistema (Docker, Postgres, HTTPS, cron).
-3. Preferir rodar como usuário com sudo, não como root direto, quando possível.
-4. Fazer isso com um snapshot/backup da VPS tirado antes (se a Hostgator oferecer), para poder reverter.
+1. Ler `deskcommcrm/ubuntu-production-installer.sh` e `deskcommcrm/hostgator-setup-kit/install-single-server.sh`
+   inteiros antes do primeiro deploy — são eles que mexem no sistema (Docker, Postgres, HTTPS, cron).
+2. Preferir rodar como usuário com sudo (`deskcomm`), não como root direto, quando possível.
+3. Fazer isso com um snapshot/backup da VPS tirado antes (se a Hostgator oferecer), para poder reverter.
+4. Ao atualizar `deskcommcrm/` com uma versão nova do upstream (re-clonar e comparar), revisar o diff
+   antes de subir de novo pro nosso repositório — ver nota sobre perda do histórico Git upstream em
+   `memoria/00-diario-do-projeto.md`.
 
 ## Variáveis de ambiente que vamos precisar preencher
 

@@ -63,8 +63,10 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       `docs/infraestrutura.md` (orçamento) e `memoria/02-pesquisa-deskcommcrm.md`.
 - [ ] Definir se vamos integrar com o Ileva (sistema de gestão) nesta fase ou deixar para uma fase 2 —
       hoje não está claro se o Ileva tem API pública para esse tipo de integração.
-- [ ] Ler o script `hostgator-setup-kit/install.sh` linha a linha antes do primeiro deploy (checklist de
-      segurança).
+- [ ] Ler `deskcommcrm/ubuntu-production-installer.sh` e
+      `deskcommcrm/hostgator-setup-kit/install-single-server.sh` linha a linha antes do primeiro deploy
+      (checklist de segurança — nomes atualizados em 2026-09-26 após vendorizar o código, ver
+      `docs/infraestrutura.md`).
 
 ## Mudança de pasta (concluída)
 

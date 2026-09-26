@@ -8,6 +8,33 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 8) — Código-fonte do DeskcommCRM vendorizado no repositório
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário pediu pra trazer o código completo do DeskcommCRM
+(https://github.com/melgarafael/DeskcommCRM) pra dentro da pasta do projeto. Clonado em
+`deskcommcrm/` (152MB sem contar `.git`), removido o histórico Git upstream (não usamos submodule —
+os arquivos entram direto no nosso próprio histórico, mais simples de gerenciar). Ajustado o
+`.gitignore` da raiz: adicionadas exceções pra `.env.hostgator.example` e `.env.voip.example`
+(templates que o DeskcommCRM versiona e que a regra genérica `.env.*` estava bloqueando por engano) e
+mais padrões de build (`out/`, `dist/`, `build/`, `.turbo/`, `.vercel/`, `coverage/`) que o
+`.gitignore` próprio do DeskcommCRM usa. Conferido que nenhum segredo real (`node_modules`, `.env`
+reais, `asterisk/pjsip.conf`/`ari.conf`) veio no clone. Commitado e enviado ao GitHub.
+
+**Observação:** perdemos o histórico de commits do projeto original ao remover o `.git` interno — se
+precisarmos comparar com atualizações futuras do upstream, o caminho é re-clonar numa pasta separada e
+diferenciar manualmente, ou reconsiderar submodule mais adiante.
+
+**Pendente para a próxima sessão:** revisar `deskcommcrm/ubuntu-production-installer.sh` (o entrypoint
+atual — chama `hostgator-setup-kit/install-single-server.sh` por baixo; os nomes antigos citados em
+`docs/infraestrutura.md`, `install.sh`/`comecar.sh`, ficaram desatualizados) linha a linha antes do
+primeiro deploy.
+
+**Arquivos alterados:** `.gitignore`, `deskcommcrm/**` (novo), `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 7) — Túnel Cloudflare instalado e funcionando
 
 **Participantes:** Samue + Claude Code
