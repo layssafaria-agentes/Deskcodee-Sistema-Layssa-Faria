@@ -21,6 +21,12 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       usa hoje? (Recomendado: número novo, para não misturar histórico/contatos pessoais com o agente.)
       Ainda não perguntado/respondido.
 - [ ] **Cloudflare Tunnel:** instalar o `cloudflared` na VPS assim que o SSH estiver disponível.
+- [ ] **Domínio `layssafaria.com` comprado (2026-09-26, Hostgator, 1 ano) — ver decisão D007.** Falta:
+      1. criar conta free no Cloudflare e adicionar o domínio;
+      2. trocar os nameservers no painel da Hostgator para os do Cloudflare;
+      3. criar túnel nomeado (`cloudflared tunnel create clinica-layssa`) e CNAME apontando pra ele;
+      4. usar o subdomínio (ex. `app.layssafaria.com` — decidido em 2026-09-26, raiz do domínio fica
+         reservada pro futuro site institucional) como `NEXT_PUBLIC_APP_URL`.
 - [x] **Domínio — "qualquer um serve?" respondido em 2026-09-26:** sim, qualquer domínio de qualquer
       registrador funciona (incluindo `.com.br`), desde que se controle o DNS dele. Não é bloqueador.
 

@@ -8,6 +8,23 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 3) — Domínio oficial comprado: layssafaria.com
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário conversou com a Dra. Layssa, que comprou o domínio **`layssafaria.com`** na
+Hostgator (1 ano). Era exatamente o gatilho previsto na decisão D005 para migrar do modo rápido do
+Cloudflare Tunnel para um túnel nomeado com domínio fixo. Registrada a decisão **D007** em
+`01-decisoes.md` com o passo a passo (Cloudflare, nameservers, túnel nomeado, CNAME).
+
+**Pendente para a próxima sessão:** criar a conta Cloudflare, trocar os nameservers na Hostgator, criar o
+túnel nomeado e o CNAME.
+
+**Arquivos alterados:** `memoria/01-decisoes.md` (D007), `memoria/03-pendencias.md`,
+`memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 2) — Repositório GitHub criado e projeto enviado
 
 **Participantes:** Samue + Claude Code

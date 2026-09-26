@@ -116,3 +116,26 @@ ser apagada automaticamente (estava em uso pela sessão do editor) — ver
 que falta.
 
 **A partir de agora, todo o trabalho neste projeto acontece em `D:\Projetos\layssafaria`.**
+
+---
+
+## D007 — Domínio oficial confirmado: layssafaria.com
+
+**Data:** 2026-09-26 · **Status:** Aprovado · **Substitui o gatilho da D005**
+
+A Dra. Layssa comprou o domínio **`layssafaria.com`** na Hostgator, por 1 ano.
+
+**Por quê:** era exatamente o gatilho previsto na [D005](#d005--domínio-usar-cloudflare-tunnel-sem-comprar-domínio-agora)
+("quando a Dra. Layssa comprar o domínio oficial da clínica"). O plano continua o mesmo: não precisa
+reinstalar nada, só apontar o domínio para o Cloudflare Tunnel.
+
+**Próximos passos (ver checklist em [`03-pendencias.md`](03-pendencias.md)):**
+1. Criar conta gratuita no Cloudflare e adicionar `layssafaria.com`.
+2. Trocar os nameservers do domínio no painel da Hostgator para os que o Cloudflare indicar.
+3. Depois que propagar, criar um túnel **nomeado** (`cloudflared tunnel create clinica-layssa`) — já
+   vale a pena fazer nomeado direto (não o modo rápido `trycloudflare.com`), já que agora existe domínio
+   fixo para apontar.
+4. Criar registro CNAME em `layssafaria.com` apontando para o túnel.
+5. Usar `https://layssafaria.com` (ou um subdomínio, ex. `app.layssafaria.com`) como `NEXT_PUBLIC_APP_URL`
+   no `.env` e como URL de callback (ex.: OAuth do Google Calendar, que exige URL estável — isso só fazia
+   sentido depois de ter domínio fixo, ver D005).

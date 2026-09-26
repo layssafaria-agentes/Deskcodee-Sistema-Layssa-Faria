@@ -4,33 +4,53 @@
 
 - [x] Confirmar que o plano Hostgator é **VPS** (acesso root/SSH, Docker instalável) e não hospedagem
       compartilhada (cPanel comum, sem Docker/root) — ver seção "Como pegar o SSH" abaixo.
-- [ ] Cloudflare Tunnel configurado (substitui a necessidade de domínio/DNS por enquanto).
+- [ ] Cloudflare Tunnel nomeado configurado, com `layssafaria.com` apontando para ele (ver seção abaixo).
 - [ ] Conta Supabase criada (tier free serve para começar).
 - [ ] Chave de API da OpenAI, com billing ativo.
 - [ ] Número de WhatsApp dedicado, com o app instalado em um celular para escanear o QR Code do WAHA.
 - [ ] Ler o `hostgator-setup-kit/install.sh` do DeskcommCRM linha a linha antes de rodar em produção.
 
-## Domínio: usando Cloudflare Tunnel (decisão D005)
+## Domínio: layssafaria.com via Cloudflare Tunnel (decisões D005 e D007)
 
-Decidimos **não comprar domínio agora**. Em vez de apontar um registro A de DNS, vamos expor a VPS pela
-internet usando o **Cloudflare Tunnel** (`cloudflared`), que dá uma URL pública com HTTPS válido de
-graça, sem abrir porta nenhuma no firewall da VPS:
+O domínio oficial **`layssafaria.com`** já foi comprado pela Dra. Layssa na Hostgator (1 ano, confirmado
+em 2026-09-26 — decisão D007). Continuamos usando o **Cloudflare Tunnel** (`cloudflared`) para expor a
+VPS pela internet com HTTPS válido de graça, sem abrir porta nenhuma no firewall — só que agora direto
+com **túnel nomeado**, já que existe domínio fixo para apontar (não precisa mais do modo rápido
+`trycloudflare.com`):
 
-1. Instalar o `cloudflared` na VPS (dentro do próprio Docker Compose do projeto ou como serviço do
-   sistema).
-2. Rodar `cloudflared tunnel --url http://localhost:<porta-do-deskcommcrm>` para o modo rápido — isso
-   gera uma URL tipo `https://palavras-aleatorias.trycloudflare.com` na hora, válida enquanto o processo
-   rodar.
-3. Usar essa URL como `NEXT_PUBLIC_APP_URL` no `.env` e como URL de callback/webhook onde for pedido.
-4. **Quando a Dra. Layssa comprar o domínio oficial** (ou se decidirmos usar um subdomínio da agência):
-   criar uma conta gratuita no Cloudflare, adicionar o domínio lá, criar um **túnel nomeado**
-   (`cloudflared tunnel create clinica-layssa`) e apontar um registro CNAME para ele — troca a URL sem
-   precisar reinstalar o DeskcommCRM, só atualizar o `.env` e reiniciar os containers.
+1. Criar uma conta gratuita no Cloudflare e adicionar o domínio `layssafaria.com` (o Cloudflare vai
+   indicar dois nameservers, tipo `xxx.ns.cloudflare.com`).
+2. No painel da Hostgator, trocar os nameservers do domínio para os que o Cloudflare indicou (propagação
+   pode levar de minutos a algumas horas).
+3. Instalar o `cloudflared` na VPS (dentro do próprio Docker Compose do projeto ou como serviço do
+   sistema) e autenticar (`cloudflared tunnel login`).
+4. Criar o túnel nomeado: `cloudflared tunnel create clinica-layssa`.
+5. Criar o registro DNS (CNAME) apontando `app.layssafaria.com` para o túnel:
+   `cloudflared tunnel route dns clinica-layssa app.layssafaria.com`.
+6. Usar `https://app.layssafaria.com` como `NEXT_PUBLIC_APP_URL` no `.env` e como URL de callback/webhook
+   onde for pedido (ex.: OAuth do Google Calendar, que exige URL estável — agora já dá pra configurar,
+   porque o domínio é fixo).
 
-**Limitação a saber:** a URL `trycloudflare.com` muda toda vez que o processo do túnel reinicia, a
-menos que seja um túnel nomeado. Para testes iniciais tudo bem; antes de divulgar o WhatsApp pra
-pacientes de verdade, vale já usar um túnel nomeado (não precisa de domínio comprado pra isso — dá pra
-nomear o túnel mesmo sem domínio, só a URL pública final fica mais estável).
+**Decidido (2026-09-26):** a Dra. Layssa quer um site institucional em `layssafaria.com` futuramente (fora
+do escopo deste projeto). Por isso o DeskcommCRM usa o subdomínio **`app.layssafaria.com`** (passo 5) —
+subdomínio é só mais um registro DNS, sem custo extra no plano free do Cloudflare, e não conflita com o
+site que vai ocupar a raiz do domínio.
+
+### Jeito mais simples: criar o túnel pelo dashboard (sem `cloudflared tunnel login`)
+
+Em vez dos comandos `cloudflared tunnel login`/`create`/`route dns` acima (que pedem login via navegador
+na própria VPS), dá pra fazer tudo pelo painel web, o que só precisa rodar **um comando** na VPS:
+
+1. Painel do Cloudflare → **Zero Trust → Networks → Tunnels → Create a tunnel** → tipo "Cloudflared" →
+   dar um nome (ex. `clinica-layssa`).
+2. O painel mostra um comando de instalação com um token embutido (ex. para Ubuntu:
+   `curl -fsSL ... | sudo bash` seguido de `sudo cloudflared service install <TOKEN>`) — rodar esse
+   comando uma única vez na VPS via SSH.
+3. Na aba **Public Hostname** do túnel, adicionar `app.layssafaria.com` apontando para
+   `http://localhost:<porta-do-deskcommcrm>` — isso já cria o registro DNS automaticamente, não precisa
+   mexer na aba de DNS separadamente.
+
+Essa via evita o fluxo de login interativo do `cloudflared` e deixa só um comando pra rodar na VPS.
 
 ## Como pegar o acesso SSH na Hostgator
 
@@ -155,7 +175,7 @@ nele, nunca precisa colar chave nenhuma aqui no chat) e o template versionado em
 | Item | Custo estimado | Observação |
 |---|---|---|
 | VPS Hostgator | já contratada pelo usuário | confirmar plano/specs (RAM mínima recomendada: 4GB) e que é VPS de verdade (root/Docker), não hospedagem compartilhada |
-| Domínio | R$ 0 por enquanto | usando Cloudflare Tunnel (decisão D005); comprar só quando a cliente decidir |
+| Domínio | já pago pela Dra. Layssa | `layssafaria.com`, 1 ano, Hostgator (decisão D007) |
 | Cloudflare | R$0 (plano free cobre Tunnel + DNS) | |
 | Supabase | R$0 (tier free) para começar | pode precisar upgrade se crescer muito |
 | OpenAI API | variável, por uso (tokens) | monitorar via `AI_BUDGET_ENFORCEMENT` |
