@@ -1,12 +1,23 @@
 # Um domínio, duas superfícies: as APIs públicas do Supabase seguem para o
 # Envoy privado; todo o restante segue para o app. Studio e Postgres não são
 # publicados.
+#
+# TLS manual (2026-09-26): atrás de Cloudflare Tunnel o domínio nunca aponta
+# para o IP real da VPS, então nem o desafio tls-alpn-01 nem o http-01 do
+# Let's Encrypt conseguem validar (a Cloudflare responde no lugar da origem).
+# Em vez de brigar com o ACME automático, usamos um certificado autoassinado
+# de longa duração (gerado uma vez, fora do Git, em
+# /var/lib/docker/volumes/deskcommcrm_caddy-data/_data/manual-tls/) — o túnel
+# já está com "No TLS Verify" ligado, então a confiança do certificado não
+# importa para esse salto interno; quem valida de verdade é a Cloudflare, na
+# borda, com o certificado dela própria.
 
 {
-	email {$ACME_EMAIL}
+	auto_https off
 }
 
-{$DOMAIN} {
+:443 {
+	tls /data/manual-tls/cert.pem /data/manual-tls/key.pem
 	encode gzip
 
 	route {
