@@ -8,6 +8,84 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont. 10) — DeskcommCRM instalado e no ar
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** rodado `ubuntu-production-installer.sh --domain app.layssafaria.com` na VPS. Três
+problemas reais encontrados e corrigidos ao longo do processo (não foi tentativa e erro sem rumo — cada
+falha apontava pra uma causa específica, diagnosticada antes de mexer em qualquer coisa):
+
+1. **`sudo -v` exigia senha mesmo com NOPASSWD** configurado — corrigido com
+   `Defaults:deskcomm !authenticate` em `/etc/sudoers.d/deskcomm-nopasswd` (ajuste só na VPS, não no
+   repositório).
+2. **Validador de chave do Supabase (`v_sb_key` em `hostgator-setup-kit/install.sh`) testava a chave pela
+   URL pública**, que só existe depois do Caddy subir — um validador vizinho (`v_sb_url`) já tinha o
+   desvio certo pra usar a URL interna em modo single-server, mas esse não. Corrigido replicando o mesmo
+   padrão (commit `9f76ea6`).
+3. **Caddy não conseguia emitir certificado Let's Encrypt** porque, atrás de Cloudflare Tunnel, o domínio
+   nunca aponta pro IP real da VPS — os desafios `tls-alpn-01` e `http-01` do ACME falham porque quem
+   responde no lugar da origem é a própria Cloudflare. Trocado por certificado autoassinado de longa
+   duração (`Caddyfile.single-server`, commit `d0f5121`) — o "No TLS Verify" do túnel cobre esse salto.
+   Isso por sua vez quebrou a chamada interna que o app/worker fazem pro domínio público (o Node.js
+   valida certificado por padrão e rejeitava o autoassinado) — corrigido com `NODE_EXTRA_CA_CERTS`
+   apontando pro mesmo certificado, só para app/worker (`docker-compose.single-server.yml`, commit
+   `e44d080`).
+
+Usuário questionou por que não seguimos "o caminho comum" (DNS direto pro IP da VPS, sem Cloudflare
+Tunnel) — resposta: essa escolha foi feita antes, por boas razões (não expor o IP real, não abrir portas,
+proteção/HTTPS de graça — decisão que already existia desde antes do DeskcommCRM entrar em cena), e o
+instalador do DeskcommCRM assume por padrão o caminho comum, daí o atrito. Optamos por manter o túnel
+(usuário concordou depois de entender o motivo) em vez de simplificar pro caminho direto.
+
+**Resultado:** https://app.layssafaria.com no ar, login funcionando, HTTPS válido (certificado de verdade
+da Cloudflare na borda — o autoassinado é só um detalhe interno entre containers, invisível pro
+visitante). Admin criado: `admin@app.layssafaria.com`, senha em
+`deskcommcrm/.runtime/admin-credentials` (permissão 600) na VPS.
+
+**Pendente para a próxima sessão:** logar no painel e trocar a senha do admin, conectar o WhatsApp
+(+55 64 99626-2769) via QR Code, cadastrar uma chave de IA (OpenAI/Anthropic) em IA › Credenciais,
+configurar SMTP.
+
+**Arquivos alterados:** `hostgator-setup-kit/install.sh`, `Caddyfile.single-server`,
+`docker-compose.single-server.yml`, `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
+## 2026-09-26 (cont. 9) — Revisão de segurança, mitigação de RAM, código na VPS, backup agendado
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário decidiu seguir com a VPS atual (3.8GB RAM, abaixo dos 8GB recomendados pelo
+instalador, mas acima do mínimo de 4GB), pedindo pra minimizar ao máximo risco de travamento/lentidão.
+Definido o número de WhatsApp: **+55 64 99626-2769** (número já usado pela clínica, não um novo dedicado
+— decisão consciente do usuário mesmo após aviso do risco). Usuário delegou explicitamente a revisão dos
+scripts de instalação ("você tá no comando").
+
+Revisão de segurança completa: lidos `ubuntu-production-installer.sh` e
+`hostgator-setup-kit/install-single-server.sh` inteiros, mais varredura por padrões de risco (chamadas de
+rede, comandos destrutivos, enfraquecimento de firewall, exfiltração de dados) em `_common.sh`,
+`install.sh`, `agent.sh` e `backup.sh`. Nada suspeito — instalador oficial do Supabase é baixado e
+conferido por SHA-256 antes de rodar, credenciais geradas aleatoriamente com arquivo protegido (chmod
+600), backup com verificações de integridade, nenhuma chamada de rede não documentada (o único POST
+externo visto em `agent.sh` é pro próprio app, fila interna de automações). **Aprovado.**
+
+Mitigação de RAM: swap ampliado de 2GB pra **6GB** e `vm.swappiness` ajustado pra **10** (usa RAM real
+primeiro, só recorre a swap sob pressão de verdade) — reduz risco de OOM em picos (ex. build) sem custo
+adicional. Se ainda assim ficar lento/instável em uso real, o próximo passo seria upgrade de RAM na
+Hostgator.
+
+Código enviado pra VPS: `git clone` do nosso próprio repositório em `/home/deskcomm/layssafaria` (inclui
+`deskcommcrm/`). Cron de backup diário configurado (`0 3 * * *`, via `hostgator-setup-kit/backup.sh`,
+log em `~/backup.log`) — só vai gerar backup de verdade depois que a stack estiver instalada e rodando.
+
+**Pendente para a próxima sessão:** rodar `bash ubuntu-production-installer.sh --domain
+app.layssafaria.com` na VPS.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 8) — Código-fonte do DeskcommCRM vendorizado no repositório
 
 **Participantes:** Samue + Claude Code

@@ -20,9 +20,10 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 - [x] **Chave da API OpenAI:** preenchida pelo usuário em `infra/.env` em 2026-09-26.
 - [x] **Supabase:** URL, anon key e service role key preenchidas pelo usuário em `infra/.env` em
       2026-09-26. Falta só o `SUPABASE_DB_URL` (connection string do Postgres).
-- [ ] **Número de WhatsApp dedicado:** a clínica vai usar um número novo só para a IA, ou o número que já
-      usa hoje? (Recomendado: número novo, para não misturar histórico/contatos pessoais com o agente.)
-      Ainda não perguntado/respondido.
+- [x] **Número de WhatsApp definido em 2026-09-26: +55 64 99626-2769** (número que a clínica já usa,
+      não um número novo dedicado — usuário decidiu conscientemente, mesmo depois de avisado do risco
+      teórico de bloqueio por automação num número com histórico real; mitigar seguindo as boas práticas
+      já documentadas: não fazer disparo em massa pra quem nunca falou com a clínica, aquecer aos poucos).
 - [ ] **Cloudflare Tunnel:** instalar o `cloudflared` na VPS assim que o SSH estiver disponível.
 - [ ] **Domínio `layssafaria.com` comprado (2026-09-26, Hostgator, 1 ano) — ver decisão D007.** Progresso:
       1. [x] conta free criada no Cloudflare, domínio adicionado, registros DNS revisados (mantido MX;
@@ -63,10 +64,14 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       `docs/infraestrutura.md` (orçamento) e `memoria/02-pesquisa-deskcommcrm.md`.
 - [ ] Definir se vamos integrar com o Ileva (sistema de gestão) nesta fase ou deixar para uma fase 2 —
       hoje não está claro se o Ileva tem API pública para esse tipo de integração.
-- [ ] Ler `deskcommcrm/ubuntu-production-installer.sh` e
-      `deskcommcrm/hostgator-setup-kit/install-single-server.sh` linha a linha antes do primeiro deploy
-      (checklist de segurança — nomes atualizados em 2026-09-26 após vendorizar o código, ver
-      `docs/infraestrutura.md`).
+- [x] **Revisão de segurança concluída em 2026-09-26.** Lidos por completo
+      `ubuntu-production-installer.sh` e `hostgator-setup-kit/install-single-server.sh`; varredura por
+      padrão (rede externa, comandos destrutivos, enfraquecimento de firewall/permissões, exfiltração)
+      em `_common.sh`, `install.sh`, `agent.sh`, `backup.sh`. Nada suspeito encontrado — instalador oficial
+      do Supabase é baixado e conferido por **SHA-256** antes de rodar, senhas geradas aleatoriamente com
+      arquivo `chmod 600`, backup com verificação de integridade (gzip -t, checa sessão não-vazia), o
+      único endpoint que recebe POST é o próprio app (fila interna de automações), sem telemetria externa.
+      Aprovado para rodar em produção.
 
 ## Mudança de pasta (concluída)
 
@@ -75,11 +80,17 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 
 ## Depois que o bloqueado acima estiver resolvido
 
-- [ ] Rodar o instalador guiado do DeskcommCRM na VPS.
-- [ ] Configurar o cron do `backup.sh` (Supabase free tier não tem backup automático).
+- [x] **DeskcommCRM instalado e no ar em 2026-09-26:** https://app.layssafaria.com respondendo,
+      login funcionando (Deskcomm CRM). Admin: `admin@app.layssafaria.com` (senha no arquivo protegido
+      `deskcommcrm/.runtime/admin-credentials` na VPS, chmod 600 — troque assim que logar). Ver
+      `00-diario-do-projeto.md` para os 3 problemas resolvidos na instalação (validador de chave,
+      certificado do Caddy, confiança de TLS do app/worker).
+- [x] Cron do backup configurado (ver entrada de 2026-09-26 mais acima).
 - [ ] Escrever e revisar os prompts dos 3 agentes definidos em
       [`docs/agentes-ia.md`](../docs/agentes-ia.md) (Recepção, Vendas/Qualificação, Follow-up).
-- [ ] Conectar WAHA com o número de WhatsApp escolhido (QR Code).
+- [ ] Cadastrar uma chave de IA (OpenAI/Anthropic) em *IA › Credenciais* — sem isso o agente não responde.
+- [ ] Conectar WAHA com o número **+55 64 99626-2769** (QR Code, 2º passo do onboarding no painel).
+- [ ] Configurar SMTP (e-mail) — hoje "esqueci a senha"/confirmação de cadastro não enviam e-mail.
 - [ ] Configurar Google Calendar para agendamento automático.
 - [ ] Testar o fluxo ponta a ponta com números de teste antes de liberar para clientes reais.
 - [x] **Repositório no GitHub criado e projeto enviado em 2026-09-26:**
