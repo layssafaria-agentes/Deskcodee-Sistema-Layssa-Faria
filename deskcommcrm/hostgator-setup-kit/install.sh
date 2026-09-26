@@ -279,6 +279,16 @@ v_supabase_url() {
 # $2 = papel esperado ('anon' ou 'service_role')
 v_sb_key() {
   local key="$1" want="$2" url="${NEXT_PUBLIC_SUPABASE_URL:-}"
+  # Mesmo problema do validador de URL acima (ver comentário ali): no
+  # single-server a URL publica so e servida pelo Caddy, que ainda nao subiu
+  # neste ponto. Atras de um Cloudflare Tunnel isso nao vira "sem resposta"
+  # (codigo 000, tolerado abaixo) e sim um 502 de verdade da borda da
+  # Cloudflare, que cai no ramo de erro. Correcao local (nao upstream) em
+  # 2026-09-26 — replica pro validador de chave o mesmo desvio que o
+  # validador de URL ja fazia pro endereco interno.
+  if [ "${SINGLE_SERVER:-0}" = "1" ] && [ -n "${SUPABASE_INTERNAL_URL:-}" ]; then
+    url="$SUPABASE_INTERNAL_URL"
+  fi
   case "$key" in
     eyJ*)
       local role ref
