@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+!.env.hostgator.example
+!.env.voip.example
 *.pem
 *.key
 infra/secrets/
@@ -10,6 +12,12 @@ infra/secrets/
 .DS_Store
 Thumbs.db
 
-# Dependências (se algum dia clonarmos o DeskcommCRM dentro deste repo)
+# Dependências e build do DeskcommCRM (clonado em deskcommcrm/, ver memoria/03-pendencias.md)
 node_modules/
 .next/
+out/
+dist/
+build/
+.turbo/
+.vercel/
+coverage/
