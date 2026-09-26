@@ -8,6 +8,20 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-26 (cont.) — Projeto reaberto no disco D, pasta antiga apagada
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário reabriu o projeto a partir de `D:\Projetos\layssafaria` e apagou a pasta
+antiga em `C:\Users\Samue\OneDrive\Área de Trabalho\layssafaria` (confirmado via `Test-Path`). Mudança de
+pasta da decisão D006 concluída — não há mais segredos duplicados sincronizando com o OneDrive. Próximo
+passo: gerar a chave SSH para a VPS.
+
+**Pendente para a próxima sessão:** testar a conexão SSH com a VPS, configurar `~/.ssh/config`, instalar
+`cloudflared`.
+
+---
+
 ## 2026-09-26 — VPS confirmada, .env preenchido, projeto saiu do OneDrive
 
 **Participantes:** Samue + Claude Code

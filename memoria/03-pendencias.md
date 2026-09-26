@@ -48,14 +48,10 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 - [ ] Ler o script `hostgator-setup-kit/install.sh` linha a linha antes do primeiro deploy (checklist de
       segurança).
 
-## Ação imediata pendente: finalizar a mudança de pasta
+## Mudança de pasta (concluída)
 
-- [ ] **Reabrir o projeto no editor/VSCode a partir de `D:\Projetos\layssafaria`** (o projeto foi movido
-      pra fora do OneDrive em 2026-09-26 — ver decisão D006 em `01-decisoes.md`). A pasta antiga em
-      `C:\Users\Samue\OneDrive\Área de Trabalho\layssafaria` ainda existe fisicamente (não foi possível
-      apagar porque estava em uso pela sessão atual) e **contém os mesmos segredos reais** — apagar assim
-      que possível depois de reabrir no novo local, pra não ficar com o `.env` duplicado dentro do
-      OneDrive.
+- [x] **Projeto reaberto a partir de `D:\Projetos\layssafaria` e pasta antiga do OneDrive apagada** —
+      confirmado em 2026-09-26. Não há mais `.env` duplicado sincronizando com a nuvem.
 
 ## Depois que o bloqueado acima estiver resolvido
 

@@ -2,7 +2,7 @@
 
 ## Checklist antes do primeiro deploy
 
-- [ ] Confirmar que o plano Hostgator é **VPS** (acesso root/SSH, Docker instalável) e não hospedagem
+- [x] Confirmar que o plano Hostgator é **VPS** (acesso root/SSH, Docker instalável) e não hospedagem
       compartilhada (cPanel comum, sem Docker/root) — ver seção "Como pegar o SSH" abaixo.
 - [ ] Cloudflare Tunnel configurado (substitui a necessidade de domínio/DNS por enquanto).
 - [ ] Conta Supabase criada (tier free serve para começar).
