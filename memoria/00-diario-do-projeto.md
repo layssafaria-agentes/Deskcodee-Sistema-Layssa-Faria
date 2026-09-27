@@ -8,6 +8,25 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-27 (cont. 2) — Visão futura: Clinicorp e Jev; correção de registro (Ileva)
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário pediu pra explicar tudo que o DeskcommCRM é capaz de fazer (resumo feito na
+conversa a partir de `VISION.md`, `ARCHITECTURE.md` e o catálogo completo de capacidades MCP). A partir
+disso, registrou um desejo futuro da Dra. Layssa: integrar o sistema com o **Clinicorp** (sistema de
+gestão da clínica) e com o **Jev**, com os agentes operando **dentro** do Clinicorp em vez de só no
+funil do DeskcommCRM. Fora do escopo agora — fica pra quando tivermos mais clareza (Jev já era D003;
+Clinicorp é novo).
+
+**Correção de registro:** confirmado com o usuário que a pendência antiga sobre "Ileva" (desde o dia 1 do
+projeto) era confusão minha — Ileva é o sistema de gestão de outro contexto do usuário (associações de
+proteção veicular), sem relação com a clínica da Dra. Layssa. Corrigido em `03-pendencias.md`.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-27 (cont.) — Agente "Recepção" rascunhado, testado e teto de IA configurado
 
 **Participantes:** Samue + Claude Code

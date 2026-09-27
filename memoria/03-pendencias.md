@@ -62,8 +62,15 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       custo: desde a v2026.6.1 não existe mais separação Core/Plus — o que era "Plus" (mídia, múltiplas
       sessões) está incluído a partir do tier pago **"Community" (~US$5/mês)**. Atualizado em
       `docs/infraestrutura.md` (orçamento) e `memoria/02-pesquisa-deskcommcrm.md`.
-- [ ] Definir se vamos integrar com o Ileva (sistema de gestão) nesta fase ou deixar para uma fase 2 —
-      hoje não está claro se o Ileva tem API pública para esse tipo de integração.
+- [ ] **Integração futura com Clinicorp (sistema de gestão da clínica) e com o Jev, pedida pela
+      Dra. Layssa em 2026-09-27** — fora do escopo agora (Jev já era D003, fora da v1; Clinicorp é
+      pendência nova). A ideia dela é os agentes operarem **dentro** do Clinicorp — muitas capacidades
+      que o DeskcommCRM já tem (agenda, funil) podem precisar rodar lá em vez de aqui. Precisa descobrir
+      se o Clinicorp tem API pública (o catálogo de capacidades já tem uma categoria "Dados externos"
+      pensada pra conectar um banco/sistema de terceiro, mas não sabemos ainda se serve pro Clinicorp
+      especificamente). **Correção de registro:** a menção antiga a "Ileva" aqui era confusão minha com
+      um sistema de gestão de outro contexto do usuário (associações de proteção veicular), sem relação
+      com a clínica — Clinicorp é o nome certo.
 - [x] **Revisão de segurança concluída em 2026-09-26.** Lidos por completo
       `ubuntu-production-installer.sh` e `hostgator-setup-kit/install-single-server.sh`; varredura por
       padrão (rede externa, comandos destrutivos, enfraquecimento de firewall/permissões, exfiltração)
