@@ -86,9 +86,14 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       `00-diario-do-projeto.md` para os 3 problemas resolvidos na instalação (validador de chave,
       certificado do Caddy, confiança de TLS do app/worker).
 - [x] Cron do backup configurado (ver entrada de 2026-09-26 mais acima).
-- [x] **WhatsApp conectado em 2026-09-27:** número `+55 62 8199-1595` com status Conectado (via QR
-      Code). IA em modo de teste (nenhum número autorizado ainda — proposital, trava de segurança até
-      terminarmos a configuração).
+- [x] **WhatsApp conectado em 2026-09-27:** número `+55 62 98199-1595` (do Samue, **número de teste** —
+      não é o `+55 64 99626-2769` da clínica ainda) com status Conectado (via QR Code). IA em modo de
+      teste (nenhum número autorizado ainda — proposital, trava de segurança até terminarmos a
+      configuração).
+- [ ] **Trocar pelo número real da clínica quando estiver tudo pronto:** conectar
+      `+55 64 99626-2769` em Conexões, e só então configurar "Aviso no WhatsApp" com o número do Samue
+      como destinatário (o sistema não deixa usar o mesmo número nos dois papéis — por isso está
+      bloqueado agora, testando com o próprio número do Samue).
 - [x] **Credencial de IA já validada:** "Chave do onboarding" (OpenAI/GPT), cadastrada automaticamente
       durante o onboarding inicial — não precisou de ação extra.
 - [x] **Funil "Agendamentos" configurado em 2026-09-27** seguindo o pacote oficial de clínica: 7 etapas
