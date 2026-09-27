@@ -12,6 +12,9 @@ infra/secrets/
 .DS_Store
 Thumbs.db
 
+# PDFs gerados (ex.: questionários pra Dra. Layssa) - não versionar, só o .md fonte
+*.pdf
+
 # Dependências e build do DeskcommCRM (clonado em deskcommcrm/, ver memoria/03-pendencias.md)
 node_modules/
 .next/

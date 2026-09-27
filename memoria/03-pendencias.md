@@ -86,13 +86,29 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       `00-diario-do-projeto.md` para os 3 problemas resolvidos na instalação (validador de chave,
       certificado do Caddy, confiança de TLS do app/worker).
 - [x] Cron do backup configurado (ver entrada de 2026-09-26 mais acima).
-- [ ] Escrever e revisar os prompts dos 3 agentes definidos em
-      [`docs/agentes-ia.md`](../docs/agentes-ia.md) (Recepção, Vendas/Qualificação, Follow-up).
-- [ ] Cadastrar uma chave de IA (OpenAI/Anthropic) em *IA › Credenciais* — sem isso o agente não responde.
-- [ ] Conectar WAHA com o número **+55 64 99626-2769** (QR Code, 2º passo do onboarding no painel).
+- [x] **WhatsApp conectado em 2026-09-27:** número `+55 62 8199-1595` com status Conectado (via QR
+      Code). IA em modo de teste (nenhum número autorizado ainda — proposital, trava de segurança até
+      terminarmos a configuração).
+- [x] **Credencial de IA já validada:** "Chave do onboarding" (OpenAI/GPT), cadastrada automaticamente
+      durante o onboarding inicial — não precisou de ação extra.
+- [x] **Funil "Agendamentos" configurado em 2026-09-27** seguindo o pacote oficial de clínica: 7 etapas
+      (Novo contato → Já respondi → Entendendo o caso → Quer agendar → Escolhendo horário → Consulta
+      marcada [ganho] → Não vai marcar [perdido]), vocabulário (paciente/consulta/marcada/não marcou).
+- [x] **Follow-ups instalados (rascunho) em 2026-09-27:** "Falta" (remarcar quem não veio) e "Consulta"
+      (retomar quem sumiu na marcação) — via galeria de modelos do produto. **Ainda não publicados**
+      (falta revisar o texto e ligar no agente quando ele existir).
+- [ ] **Follow-ups "Exame" e "Cirurgia" não instalados** — pedem uma etapa do funil como gatilho e nosso
+      funil (só vai até a avaliação inicial) não tem uma etapa de "aguardando exame"/"decidindo cirurgia".
+      Decidir com a Dra. Layssa se o processo dela precisa dessas etapas extras.
+- [ ] **Questionário enviado pra Dra. Layssa em 2026-09-27** (`clinica/questionario-dra-layssa.md` +
+      PDF) — aguardando resposta. Bloqueia: base de conhecimento, o prompt final dos 3 agentes
+      (`docs/agentes-ia.md`), memória da organização (regras da casa), e publicar qualquer coisa.
+- [ ] Cadastrar uma chave de IA **da Anthropic** (opcional — hoje só tem OpenAI) se quisermos usar Claude
+      em algum ponto de uso específico.
 - [ ] Configurar SMTP (e-mail) — hoje "esqueci a senha"/confirmação de cadastro não enviam e-mail.
 - [ ] Configurar Google Calendar para agendamento automático.
-- [ ] Testar o fluxo ponta a ponta com números de teste antes de liberar para clientes reais.
+- [ ] Testar o fluxo ponta a ponta com números de teste antes de liberar para clientes reais (e antes
+      disso, autorizar números de teste em Conexões → Configurar acesso da IA).
 - [x] **Repositório no GitHub criado e projeto enviado em 2026-09-26:**
       https://github.com/layssafaria-agentes/Deskcodee-Sistema-Layssa-Faria (branch `main`). Push feito
       via token fine-grained temporário (escopo Contents: read/write só desse repo), removido do

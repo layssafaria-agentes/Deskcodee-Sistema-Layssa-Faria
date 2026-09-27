@@ -8,6 +8,49 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-27 — Configuração dos agentes começada: WhatsApp, funil e follow-ups
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário confirmou o WhatsApp da clínica (**+55 64 99626-2769**, número que a
+clínica já usa) e entrou pela primeira vez no painel do DeskcommCRM pra configurar os agentes. Achado o
+guia oficial do próprio produto pra isso — skill `deskcomm-cliente-novo` dentro do repositório
+(`.agents/skills/deskcomm-cliente-novo/`), que existe exatamente pra montar um cliente novo por nicho.
+
+Como o guia exige triagem (não dá pra inventar regra de negócio), criado
+`clinica/questionario-dra-layssa.md` — e depois, a pedido do usuário, uma versão em PDF
+(`clinica/questionario-dra-layssa.pdf`, gerado com reportlab, **não versionado no Git** por pedido do
+usuário) — cobrindo tanto a base de conhecimento (preços, procedimentos, FAQ) quanto as regras de
+comportamento do agente (o que pode decidir sozinho, quando chama humano, regras de reengajamento).
+Enviado pra Dra. Layssa responder; ainda aguardando.
+
+Enquanto isso, avançado tudo que **não** depende das respostas dela, seguindo `pela-tela.md` do guia:
+1. **Conexões:** WhatsApp conectado (status Conectado), IA em modo de teste (proposital).
+2. **IA › Credenciais:** já existia uma chave OpenAI validada, criada no onboarding inicial.
+3. **IA › Provedores:** mantido "Modelo padrão" (GPT-5.6 Terra) pra tudo — simples e já funcional;
+   afinar por ponto de uso fica pra depois, com dado real de custo. Confirmado que "Jev" segue desligado
+   (decisão D003).
+4. **Funil "Agendamentos":** reconfigurado o funil padrão (que veio com etapas de e-commenrce, tipo
+   "Carrinho abandonado" — modelo errado que o onboarding cria por padrão) pro pacote oficial de
+   clínica: 7 etapas (Novo contato → Já respondi → Entendendo o caso → Quer agendar → Escolhendo
+   horário → Consulta marcada [ganho] → Não vai marcar [perdido]), vocabulário
+   paciente/consulta/marcada/não marcou. Achado detalhe da interface: pra mudar qual etapa é "ganho",
+   primeiro escolhe a NOVA etapa como ganho (a marcação se move sozinha) — tentar remover da antiga
+   primeiro dá erro.
+5. **IA › Follow-ups:** instalados (rascunho, não publicados) os modelos prontos de clínica **Falta**
+   (remarcar quem não veio) e **Consulta** (retomar quem sumiu na marcação). **Não instalados**: Exame e
+   Cirurgia — pedem uma etapa do funil como gatilho, e nosso funil não tem etapa de "aguardando
+   exame"/"decidindo cirurgia" — decisão de processo real da clínica, perguntar à Dra. Layssa.
+
+**Pendente para a próxima sessão:** aguardar resposta do questionário; quando vier, preencher
+`clinica/base-conhecimento.md`, escrever o prompt final do agente de Recepção (esqueleto já existe no
+pacote de clínica do guia), publicar os follow-ups, testar, e só depois publicar o agente de verdade.
+
+**Arquivos alterados:** `clinica/questionario-dra-layssa.md` (novo), `.gitignore` (`*.pdf` ignorado),
+`memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-26 (cont. 10) — DeskcommCRM instalado e no ar
 
 **Participantes:** Samue + Claude Code
