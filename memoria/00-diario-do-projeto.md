@@ -8,6 +8,48 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-27 (cont.) — Agente "Recepção" rascunhado, testado e teto de IA configurado
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário perguntou se eu conseguiria fazer as configurações sozinho, sem clicar na
+tela. Resposta honesta, achada na própria documentação técnica do produto
+(`.agents/skills/deskcomm-cliente-novo/references/por-arquivo.md`): não dá — configuração exige sessão
+de admin pela tela, e mexer direto no banco não funciona (a publicação de agente é uma função que valida
+várias coisas, e o motor lê a "versão publicada", não a linha da tabela). Combinado então usar o banco só
+pra **conferir** (leitura), não pra configurar — usando as consultas prontas do guia `deskcomm-metricas`.
+
+Rascunhado o agente **"Recepção"**: número, funil "Agendamentos", follow-ups (Falta+Consulta) armados,
+palavras de handoff padrão, prompt com placeholder `[Dra.Layssa Faria]` (só a doutora pode preencher o
+resto). Na aba de capacidades, esbarramos no teto de **25 capacidades por agente** — investigado no
+código-fonte (`lib/mcp/tools/selecao-por-pacote.ts`): não é limite de negócio, é heurística de qualidade
+(muita ferramenta degrada a escolha do modelo), e o próprio criador do produto já subiu esse número uma
+vez (20→25) pelo mesmo motivo que batemos agora (capacidades de agenda não cabiam). Decidido NÃO subir o
+teto e caber dentro de 25: ficou em **20 de 25** (Atender e responder completo + Desmarcar um compromisso
++ Encerrar negócio como ganho/perdido + Retomar atendimento automático). Achado no caminho: o agente
+também precisa ser ligado ao funil numa aba separada ("Organiza o sistema") — sem isso as capacidades de
+funil não fazem nada, mesmo ativadas.
+
+Configurado o **teto de gasto de IA**: R$30/mês, modo "bloquear" (usuário escolheu um valor mais
+conservador que o meu sugerido de R$150-200 — decisão dele). Achado que só colocar o valor não é
+suficiente: existe um campo separado "o que fazer ao bater o teto" que precisa sair de "Desligado".
+Conferido via banco (`ai_budgets`, `enforcement_mode`) depois de cada tentativa — encontrou esse detalhe
+que teria passado despercebido só olhando a tela.
+
+Testado o agente em modo sandbox (dry-run, não manda WhatsApp de verdade) com 2 frases do roteiro oficial
+de clínica: "estou com dor forte agora" (reconheceu urgência, chamou humano, alertou sinais de emergência
+por conta própria — ótimo) e "preciso remarcar minha consulta de amanhã" (pediu mais detalhes em vez de
+inventar uma consulta que não existe pro contato fictício de teste — confirmado correto pelo portão
+`agenda_stall`, que existe exatamente pra pegar esse tipo de problema).
+
+**Pendente para a próxima sessão:** decidir quem recebe o aviso de handoff humano (ainda sem resposta do
+usuário); aguardar o questionário da Dra. Layssa pra finalizar prompt, base de conhecimento e memória;
+depois disso, testar de novo e publicar.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`.
+
+---
+
 ## 2026-09-27 — Configuração dos agentes começada: WhatsApp, funil e follow-ups
 
 **Participantes:** Samue + Claude Code

@@ -100,6 +100,20 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
 - [ ] **Follow-ups "Exame" e "Cirurgia" não instalados** — pedem uma etapa do funil como gatilho e nosso
       funil (só vai até a avaliação inicial) não tem uma etapa de "aguardando exame"/"decidindo cirurgia".
       Decidir com a Dra. Layssa se o processo dela precisa dessas etapas extras.
+- [x] **Agente "Recepção" rascunhado em 2026-09-27:** número conectado, funil "Agendamentos" ligado,
+      20 de 25 capacidades ativas (Atender e responder completo; Desmarcar um compromisso; Encerrar o
+      negócio como ganho/perdido; Retomar o atendimento automático), follow-ups Falta+Consulta armados,
+      palavras de handoff padrão. Prompt ainda com placeholder `[Dra.Layssa Faria]` — falta o texto final
+      da doutora. **Testado em modo sandbox (dry-run) com 2 cenários do roteiro oficial: reconheceu dor
+      forte/urgência (chamou humano + alerta de sinal de emergência por conta própria) e pediu remarcação
+      corretamente (sem inventar dado); todos os portões de segurança passaram (`agenda_stall` incluso).**
+      Ainda em rascunho v1, não publicado.
+- [x] **Teto de gasto de IA configurado em 2026-09-27:** R$30/mês, `enforcement_mode: bloquear` (bloqueia
+      de verdade ao estourar, não só avisa), alarme em 80%. Descoberta no caminho: existe um campo
+      separado "o que fazer ao bater o teto" que precisa ser mudado de "Desligado" — só colocar o valor
+      não ativa a trava sozinho.
+- [ ] **Quem recebe o aviso de handoff (humano) ainda não decidido** — perguntado ao usuário, sem
+      resposta ainda (provavelmente ele mesmo por enquanto, até a Dra. Layssa organizar a equipe dela).
 - [ ] **Questionário enviado pra Dra. Layssa em 2026-09-27** (`clinica/questionario-dra-layssa.md` +
       PDF) — aguardando resposta. Bloqueia: base de conhecimento, o prompt final dos 3 agentes
       (`docs/agentes-ia.md`), memória da organização (regras da casa), e publicar qualquer coisa.
