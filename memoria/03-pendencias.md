@@ -64,13 +64,47 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       `docs/infraestrutura.md` (orçamento) e `memoria/02-pesquisa-deskcommcrm.md`.
 - [ ] **Integração futura com Clinicorp (sistema de gestão da clínica) e com o Jev, pedida pela
       Dra. Layssa em 2026-09-27** — fora do escopo agora (Jev já era D003, fora da v1; Clinicorp é
-      pendência nova). A ideia dela é os agentes operarem **dentro** do Clinicorp — muitas capacidades
-      que o DeskcommCRM já tem (agenda, funil) podem precisar rodar lá em vez de aqui. Precisa descobrir
-      se o Clinicorp tem API pública (o catálogo de capacidades já tem uma categoria "Dados externos"
-      pensada pra conectar um banco/sistema de terceiro, mas não sabemos ainda se serve pro Clinicorp
-      especificamente). **Correção de registro:** a menção antiga a "Ileva" aqui era confusão minha com
+      pendência nova). **Correção de registro:** a menção antiga a "Ileva" aqui era confusão minha com
       um sistema de gestão de outro contexto do usuário (associações de proteção veicular), sem relação
       com a clínica — Clinicorp é o nome certo.
+
+      **Especificado em reunião de 2026-09-27 (via amiga da Dra. Layssa, que já tem algo parecido):** é
+      uma funcionalidade **de uso pessoal da própria Dra. Layssa** (não fala com paciente, não é sobre
+      paciente acessar nada), **dentro do próprio DeskcommCRM**, operando o Clinicorp por API. Ela manda
+      um comando em linguagem natural, tipo "IA, hoje eu atendi o paciente tal, na hora tal, fiz tal
+      procedimento, custou tal quantia" — e o agente, usando a API do Clinicorp, cadastra o paciente lá,
+      preenche a anamnese, registra o procedimento — acesso a **praticamente tudo dentro do Clinicorp**,
+      **exceto a parte financeira** (ela quer essa parte de fora, por decisão dela).
+
+      **Consideração técnica (levantada por mim, não é decisão ainda):** isso é arquiteturalmente
+      diferente do que o DeskcommCRM já oferece pronto hoje. A categoria "Dados externos" do catálogo de
+      capacidades (`lib/mcp/tools/catalogo/dados-externos.ts`) hoje só **LÊ** um banco/sistema externo
+      ("ver tabelas", "buscar dados") — não executa ação de escrita (cadastrar paciente, preencher
+      anamnese) num sistema de terceiro via API própria dele. Pra isso funcionar de verdade dentro do
+      DeskcommCRM, provavelmente precisa **estender o catálogo de capacidades com um pacote novo
+      específico pro Clinicorp** (tools de escrita: cadastrar paciente, anamnese, procedimento) — não é
+      só ativar algo que já existe pronto, é desenvolvimento novo em cima da arquitetura MCP que o
+      produto já tem.
+
+      **Confirmado por pesquisa em 2026-09-27: o Clinicorp TEM API pública documentada** (REST + OAuth2),
+      em `https://sistema.clinicorp.com/api-docs/#/` — existem integrações reais de terceiros usando-a
+      pra cadastro de paciente, consulta de agenda e agendamento (ex.: via n8n), além de dados
+      financeiros e analytics. Ou seja, **é tecnicamente viável**, não é só uma ideia especulativa.
+
+      **Passos antes de avançar:** (1) a Dra. Layssa (ou quem administra a conta Clinicorp da clínica)
+      precisa gerar credenciais/API key de desenvolvedor no próprio Clinicorp; (2) mapear nos docs reais
+      quais endpoints cobrem cadastro de paciente, anamnese e registro de procedimento (e confirmar que
+      dá pra excluir/não tocar nos endpoints financeiros, como ela pediu); (3) desenhar o novo pacote de
+      capacidades MCP pro Clinicorp dentro do DeskcommCRM, seguindo o mesmo padrão dos pacotes existentes
+      (`atendimento`, `agendamento`, etc.).
+
+      **A parte de voz (comando por áudio no WhatsApp) já é nativa do produto** — o ponto de uso "Ver e
+      ouvir" em IA › Provedores já transcreve áudio (`whisper-1` + modelo principal), é o mesmo motor
+      que qualquer agente usa. Não precisa construir nada novo pra isso — só o pacote de ferramentas do
+      Clinicorp (passo 3 acima) é trabalho novo de verdade. **Recomendação de segurança:** o agente deve
+      **confirmar por escrito** o que entendeu (paciente, horário, procedimento, valor) antes de
+      executar a escrita no Clinicorp — fala solta é imprecisa, e é melhor perguntar do que cadastrar
+      errado no sistema real da clínica.
 - [x] **Revisão de segurança concluída em 2026-09-26.** Lidos por completo
       `ubuntu-production-installer.sh` e `hostgator-setup-kit/install-single-server.sh`; varredura por
       padrão (rede externa, comandos destrutivos, enfraquecimento de firewall/permissões, exfiltração)
@@ -124,8 +158,20 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       de verdade ao estourar, não só avisa), alarme em 80%. Descoberta no caminho: existe um campo
       separado "o que fazer ao bater o teto" que precisa ser mudado de "Desligado" — só colocar o valor
       não ativa a trava sozinho.
-- [ ] **Quem recebe o aviso de handoff (humano) ainda não decidido** — perguntado ao usuário, sem
-      resposta ainda (provavelmente ele mesmo por enquanto, até a Dra. Layssa organizar a equipe dela).
+- [x] **Destinatário do handoff humano definido em 2026-09-27 (resposta dela, não provisório do Samue
+      mais):** a própria Dra. Layssa (número pessoal registrado em `clinica/pacote-layssafaria.md`, fora
+      do Git). Falta só atualizar a tela "Aviso no WhatsApp" no DeskcommCRM com esse número (o número de
+      teste do Samue estava lá antes — como agora são números diferentes do conectado, deve salvar sem
+      o bloqueio de antes).
+- [x] **Intake avançou bastante em 2026-09-27** (ver `clinica/pacote-layssafaria.md`): blocos 1
+      (identificação), 2 (sobre ela), 4 (convênios/pagamento), 5 (FAQ parcial + lista de 40+ perguntas
+      de paciente pra estruturar), 6 (agendamento), 7 (o que pode decidir sozinha — preço/desconto/
+      parcelamento), 8 (quando chamar humano, resposta bem completa dela) já registrados e refletidos em
+      `clinica/base-conhecimento.md`. **Divergência a confirmar com ela:** parcelamento no boleto — falou
+      16x numa resposta e 18x em outra.
+      **Ainda faltam:** bloco 3 (tabela de serviços/preços — ela marcou como prioridade "MUITO
+      importante"), 9-12 (reengajamento, regras da casa, tom de voz, depoimentos), e respostas
+      específicas das perguntas 11-20 (elegibilidade clínica) e 30-40 (investimento) da lista de FAQ.
 - [ ] **Questionário enviado pra Dra. Layssa em 2026-09-27** (`clinica/questionario-dra-layssa.md` +
       PDF) — aguardando resposta. Bloqueia: base de conhecimento, o prompt final dos 3 agentes
       (`docs/agentes-ia.md`), memória da organização (regras da casa), e publicar qualquer coisa.

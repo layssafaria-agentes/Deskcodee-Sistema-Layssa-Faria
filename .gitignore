@@ -12,6 +12,13 @@ infra/secrets/
 .DS_Store
 Thumbs.db
 
+# Dados reais da Dra. Layssa / da clínica - fica só local, nunca no repositório público
+# (o questionário em branco pode continuar público, é só o formulário sem resposta)
+clinica/base-conhecimento.md
+clinica/manual-mestre-ia.md
+clinica/pacote-layssafaria.md
+docs/guia-preencher-conhecimento-e-agente.md
+
 # PDFs gerados (ex.: questionários pra Dra. Layssa) - não versionar, só o .md fonte
 *.pdf
 

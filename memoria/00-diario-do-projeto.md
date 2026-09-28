@@ -8,6 +8,56 @@ adicionar uma entrada nova no topo (mais recente primeiro).
 
 ---
 
+## 2026-09-28 — Dados reais da clínica saem do repositório público (privacidade)
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário pediu explicitamente que dados da Dra. Layssa não sejam commitados. Como o
+repositório no GitHub é **público**, conferido o histórico inteiro por dado sensível real (CNPJ, CRO,
+WhatsApp pessoal, nome completo, endereço, nome da clínica) — **nada disso tinha vazado**: o
+`base-conhecimento.md` só tinha sido commitado uma vez, no dia 1, ainda como template vazio; o
+`manual-mestre-ia.md` e `pacote-layssafaria.md` nunca chegaram a ser commitados (só o WhatsApp
+**comercial** da clínica, que é público por natureza — os pacientes ligam nele mesmo — apareceu antes).
+Achado só um ponto não commitado ainda por pouco: o WhatsApp **pessoal** dela estava prestes a ir pro
+`03-pendencias.md` — removido, fica só registrado em `clinica/pacote-layssafaria.md`.
+
+**Ação tomada:** `clinica/base-conhecimento.md`, `clinica/manual-mestre-ia.md`,
+`clinica/pacote-layssafaria.md` e `docs/guia-preencher-conhecimento-e-agente.md` (esse último tinha o
+prompt final com CRO/telefone/preços embutidos) adicionados ao `.gitignore` — continuam existindo só
+localmente. O `clinica/questionario-dra-layssa.md` (formulário em branco, sem resposta real) continua
+público, não tem dado sensível. `memoria/` (diário e pendências) segue público, mas revisado pra não
+repetir identificador sensível — só descreve o que foi feito, sem repetir CNPJ/CRO/telefone pessoal.
+
+**Arquivos alterados:** `.gitignore`, `memoria/03-pendencias.md` (redação do telefone pessoal),
+`memoria/00-diario-do-projeto.md`. `clinica/base-conhecimento.md` removido do índice do Git (`git rm
+--cached`, arquivo local intacto).
+
+---
+
+## 2026-09-27 (cont. 3) — Visão especificada: agente pessoal da doutora + Clinicorp
+
+**Participantes:** Samue + Claude Code
+
+**O que aconteceu:** usuário trouxe da reunião do dia com a Dra. Layssa uma especificação bem mais
+concreta do desejo de integração com Clinicorp (já registrado antes, de forma vaga). A referência é um
+sistema parecido que uma amiga dela já tem: a doutora manda uma mensagem em linguagem natural pro
+WhatsApp de um agente pessoal ("hoje atendi o paciente tal, fiz tal procedimento, custou tal valor") e o
+agente sozinho cadastra o paciente, preenche anamnese e registra tudo no sistema de gestão — **menos a
+parte financeira**, que ela quer de fora.
+
+Entendi errado numa primeira tentativa (achei que seria um agente/projeto separado, fora do
+DeskcommCRM) — usuário corrigiu: é uma funcionalidade **de uso pessoal da doutora, dentro do próprio
+DeskcommCRM**, operando o Clinicorp via API (nada a ver com paciente acessando algo). Registrado
+corrigido em `03-pendencias.md`, com a ressalva técnica de que isso exige estender o catálogo de
+capacidades MCP do produto com um pacote novo de escrita específico pro Clinicorp — a categoria "Dados
+externos" que já existe hoje só lê sistema externo, não executa ação nele.
+
+**Arquivos alterados:** `memoria/03-pendencias.md`, `memoria/00-diario-do-projeto.md`. Também criado
+nesta sessão: `docs/guia-preencher-conhecimento-e-agente.md` (passo a passo com texto pronto pro usuário
+preencher Conhecimento, Memória e o prompt final do agente Recepção).
+
+---
+
 ## 2026-09-27 (cont. 2) — Visão futura: Clinicorp e Jev; correção de registro (Ileva)
 
 **Participantes:** Samue + Claude Code
