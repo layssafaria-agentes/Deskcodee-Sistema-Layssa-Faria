@@ -105,6 +105,13 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       **confirmar por escrito** o que entendeu (paciente, horário, procedimento, valor) antes de
       executar a escrita no Clinicorp — fala solta é imprecisa, e é melhor perguntar do que cadastrar
       errado no sistema real da clínica.
+
+      **Requisito de dado, reforçado por ela em 2026-09-30 (categórico — "TODOS os procedimentos
+      precisam ter a opção"):** registrar qualquer procedimento com referência de posição no dente —
+      **MESIAL, DISTAL, CERVICAL, PALATINO, LINGUAL, VESTIBULAR, OCLUSAL** (ex.: "restauração mesial",
+      "raspagem cervical lingual" — exemplos, não lista fechada de onde se aplica). Não é opcional pra
+      só alguns tipos de procedimento — precisa valer pra todos. Isso é campo/metadado a mapear
+      no pacote de capacidades do Clinicorp (passo 3), não precisa aparecer na conversa com o paciente.
 - [x] **Revisão de segurança concluída em 2026-09-26.** Lidos por completo
       `ubuntu-production-installer.sh` e `hostgator-setup-kit/install-single-server.sh`; varredura por
       padrão (rede externa, comandos destrutivos, enfraquecimento de firewall/permissões, exfiltração)
@@ -168,10 +175,17 @@ Lista viva do que falta para avançar. Marcar `[x]` quando resolvido e mover par
       de paciente pra estruturar), 6 (agendamento), 7 (o que pode decidir sozinha — preço/desconto/
       parcelamento), 8 (quando chamar humano, resposta bem completa dela) já registrados e refletidos em
       `clinica/base-conhecimento.md`. **Divergência a confirmar com ela:** parcelamento no boleto — falou
-      16x numa resposta e 18x em outra.
-      **Ainda faltam:** bloco 3 (tabela de serviços/preços — ela marcou como prioridade "MUITO
-      importante"), 9-12 (reengajamento, regras da casa, tom de voz, depoimentos), e respostas
-      específicas das perguntas 11-20 (elegibilidade clínica) e 30-40 (investimento) da lista de FAQ.
+      16x numa resposta e 18x em outra — **resolvido em 2026-09-28: 18x é o certo.**
+      **Atualização 2026-09-28/30:** ela também mandou um manual completo de 85 seções
+      (`clinica/manual-mestre-ia.md`) cobrindo tom de voz, regras de preço e quando chamar humano de
+      forma bem mais completa que os blocos 8/9/11 originais — e confirmou o que é "Renova Eleva"
+      (bioestimulador de colágeno injetável). E em 2026-09-30 mandou a **tabela de preços completa do
+      bloco 3** (quase 50 procedimentos, já em `base-conhecimento.md` e `pacote-layssafaria.md`).
+      **Ainda faltam:** blocos 10/12 (regras gerais da casa, depoimentos autorizados — menos urgentes),
+      respostas específicas das perguntas 11-20 (elegibilidade clínica) e 30-40 (investimento específico)
+      da lista de FAQ, e **4 confirmações de áudio ambíguo do bloco 3**: valor da toxina botulínica
+      (R$1.200 ou 1.300?), valor do bioestimulador Renova Elleva (R$1.000 ou 1.800?), o que é "massinha
+      do implante" (R$50), e se "protetor vocal" é "protetor bucal" (R$450/550).
 - [ ] **Questionário enviado pra Dra. Layssa em 2026-09-27** (`clinica/questionario-dra-layssa.md` +
       PDF) — aguardando resposta. Bloqueia: base de conhecimento, o prompt final dos 3 agentes
       (`docs/agentes-ia.md`), memória da organização (regras da casa), e publicar qualquer coisa.
